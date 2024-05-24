@@ -40,14 +40,14 @@ export const LoginForm = () => {
   const onSubmit = (data: z.infer<typeof LoginSchema>) => {
     setError("");
     setSuccess("");
-    startTransition(() => {
-      login(data).then((res) => {
-        if (res.code === 0) {
-          setSuccess(res.message);
-        } else {
-          setError(res.message);
-        }
-      });
+    startTransition(async () => {
+      const res = await login(data);
+      if (!res) return;
+      if (res.code === 0) {
+        setSuccess(res.message);
+      } else {
+        setError(res.message);
+      }
     });
   };
   return (

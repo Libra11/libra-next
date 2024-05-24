@@ -10,7 +10,7 @@ import { code } from "@/common/code";
 import { getUserByEmail } from "@/data/user";
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas";
-import { hash } from "bcrypt";
+import { hash } from "bcryptjs";
 import * as z from "zod";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {

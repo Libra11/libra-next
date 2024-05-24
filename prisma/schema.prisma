@@ -33,7 +33,10 @@ model Account {
   @@map("accounts")
 }
 
-
+enum UserRole {
+  USER
+  ADMIN
+}
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -41,6 +44,7 @@ model User {
   emailVerified DateTime? @map("email_verified")
   image         String?
   password      String?
+  role          UserRole @default(USER)
   accounts      Account[]
 
   @@map("users")
