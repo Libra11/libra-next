@@ -13,7 +13,7 @@ interface TestButtonProps {
 }
 
 const sendEmail = async () => {
-  await sendMail();
+  await sendMail("", "");
 };
 
 export const TestButton = ({ label }: TestButtonProps) => {

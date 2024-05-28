@@ -1,13 +1,13 @@
 /**
  * Author: Libra
- * Date: 2024-05-23 13:37:41
+ * Date: 2024-05-28 14:36:43
  * LastEditors: Libra
  * Description:
  */
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CardWrapper } from "./cardWrapper";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -17,67 +17,47 @@ import {
   FormMessage,
 } from "../ui/form";
 import * as z from "zod";
-import { RegisterSchema } from "@/schemas";
+import { ResetSchema } from "@/schemas";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { FormError } from "../formError";
 import { FormSuccess } from "../formSuccess";
 import { useState, useTransition } from "react";
-import { register } from "@/actions/register";
+import { reset } from "@/actions/reset";
 
-export const RegisterForm = () => {
+export const ResetForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-  const form = useForm<z.infer<typeof RegisterSchema>>({
-    resolver: zodResolver(RegisterSchema),
+  const form = useForm<z.infer<typeof ResetSchema>>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
       email: "",
-      password: "",
-      name: "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof RegisterSchema>) => {
+  const onSubmit = (data: z.infer<typeof ResetSchema>) => {
     setError("");
     setSuccess("");
-    startTransition(() => {
-      register(data).then((res) => {
-        if (res.code === 0) {
-          setSuccess(res.message);
-        } else {
-          setError(res.message);
-        }
-      });
+    startTransition(async () => {
+      const res = await reset(data);
+      if (!res) return;
+      if (res.code === 0) {
+        setSuccess(res.message);
+      } else {
+        setError(res.message);
+      }
     });
   };
   return (
     <CardWrapper
-      headerLabel="Create an account"
-      backButtonLabel="Already have an account?"
+      headerLabel="Forgot your password?"
+      backButtonLabel="Back to login"
       backButtonHref="/auth/login"
-      showSocial
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className=" space-y-6">
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={isPending}
-                      {...field}
-                      placeholder="Libra"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="email"
@@ -96,29 +76,11 @@ export const RegisterForm = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Pasword</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="******"
-                      type="password"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={isPending} type="submit" className="w-full">
-            Sign up
+            Send reset email
           </Button>
         </form>
       </Form>

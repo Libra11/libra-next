@@ -48,19 +48,30 @@ const requestOptions = {
     grant_type: "refresh_token",
   }),
 };
-
-const mailOptions = {
-  from: process.env.EMAIL_USER, // sender address
-  to: "97220040@qq.com", // list of receivers
-  subject: "Hello ✔", // Subject line
-  text: "Hello world?", // plain text body
-  html: "<h1>Hello world?</h1>", // html body
-};
-
-export const sendMail = async () => {
+export const sendMail = async (to: string, token: string) => {
   try {
     const transporter = await createTransporter();
-    const info = await transporter.sendMail(mailOptions);
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER, // sender address
+      to, // list of receivers
+      subject: "Confirm your email", // Subject line
+      html: `<p>Click <a href='http://localhost:3001/auth/new-verification?token=${token}'>here</a> to verify your email</p>`, // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+  } catch (error) {
+    console.error("send fail", error);
+  }
+};
+
+export const sendResetMail = async (to: string, token: string) => {
+  try {
+    const transporter = await createTransporter();
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER, // sender address
+      to, // list of receivers
+      subject: "Reset your password", // Subject line
+      html: `<p>Click <a href='http://localhost:3001/auth/new-password?token=${token}'>here</a> to reset your password</p>`, // html body
+    });
     console.log("Message sent: %s", info.messageId);
   } catch (error) {
     console.error("send fail", error);

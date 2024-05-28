@@ -14,6 +14,7 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
 import * as z from "zod";
+import { sendMail } from "./email";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -36,16 +37,17 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     };
   }
 
-  // if (!exeistingUser.emailVerified) {
-  //   const verificationToken = await generateVerificationToken(
-  //     exeistingUser.email
-  //   );
-  //   return {
-  //     code: 0,
-  //     message: "Confirmation email sent!",
-  //     data: verificationToken,
-  //   };
-  // }
+  if (!exeistingUser.emailVerified) {
+    const verificationToken = await generateVerificationToken(
+      exeistingUser.email
+    );
+    await sendMail(verificationToken.email, verificationToken.token);
+    return {
+      code: 0,
+      message: "Confirmation email sent!",
+      data: verificationToken,
+    };
+  }
   try {
     await signIn("credentials", {
       email,

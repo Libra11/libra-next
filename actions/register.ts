@@ -13,6 +13,7 @@ import { generateVerificationToken } from "@/lib/tokens";
 import { RegisterSchema } from "@/schemas";
 import { hash } from "bcryptjs";
 import * as z from "zod";
+import { sendMail } from "./email";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
@@ -47,7 +48,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   });
 
   const verificationToken = await generateVerificationToken(email);
-  console.log(verificationToken);
+  await sendMail(verificationToken.email, verificationToken.token);
 
   return {
     code: 0,
