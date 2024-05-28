@@ -8,6 +8,8 @@
 
 import { signIn } from "@/auth";
 import { code } from "@/common/code";
+import { getUserByEmail } from "@/data/user";
+import { generateVerificationToken } from "@/lib/tokens";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSchema } from "@/schemas";
 import { AuthError } from "next-auth";
@@ -24,6 +26,26 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     };
   }
   const { email, password } = validatedFields.data;
+
+  const exeistingUser = await getUserByEmail(email);
+  if (!exeistingUser || !exeistingUser.password || !exeistingUser.email) {
+    return {
+      code: code.INVALID_CREDENTIALS,
+      message: "Invalid credentials",
+      data: null,
+    };
+  }
+
+  // if (!exeistingUser.emailVerified) {
+  //   const verificationToken = await generateVerificationToken(
+  //     exeistingUser.email
+  //   );
+  //   return {
+  //     code: 0,
+  //     message: "Confirmation email sent!",
+  //     data: verificationToken,
+  //   };
+  // }
   try {
     await signIn("credentials", {
       email,

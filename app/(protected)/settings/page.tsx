@@ -5,6 +5,7 @@
  * Description:
  */
 import { auth, signOut } from "@/auth";
+import { TestButton } from "@/components/testButton";
 
 export default async function SettingsPage() {
   const session = await auth();
@@ -21,6 +22,7 @@ export default async function SettingsPage() {
       >
         <button type="submit">Sign out</button>
       </form>
+      <TestButton label="Send mail" />
     </div>
   );
 }

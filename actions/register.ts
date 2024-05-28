@@ -9,6 +9,7 @@
 import { code } from "@/common/code";
 import { getUserByEmail } from "@/data/user";
 import { db } from "@/lib/db";
+import { generateVerificationToken } from "@/lib/tokens";
 import { RegisterSchema } from "@/schemas";
 import { hash } from "bcryptjs";
 import * as z from "zod";
@@ -44,6 +45,9 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
       name,
     },
   });
+
+  const verificationToken = await generateVerificationToken(email);
+  console.log(verificationToken);
 
   return {
     code: 0,
