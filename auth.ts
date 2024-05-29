@@ -9,10 +9,12 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "./auth.config";
 import { db } from "./lib/db";
 import { getUserById } from "./data/user";
+import { getTwoFactorConfirmationByUserId } from "./data/two-factor-confirmation";
 
 declare module "next-auth" {
   interface User {
     role: "ADMIN" | "USER";
+    isTwoFactorEnabled: boolean;
   }
   interface Session {
     user?: User;
@@ -21,6 +23,7 @@ declare module "next-auth" {
 declare module "@auth/core/jwt" {
   interface JWT {
     role: "ADMIN" | "USER";
+    isTwoFactorEnabled: boolean;
   }
 }
 
@@ -49,6 +52,19 @@ export const {
       const exeistingUser = await getUserById(user.id);
 
       if (!exeistingUser?.emailVerified) return false;
+
+      if (exeistingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          exeistingUser.id
+        );
+        if (!twoFactorConfirmation) return false;
+        // Delete the two factor confirmation token for next sign in
+        await db.twoFactorConfirmation.delete({
+          where: {
+            id: twoFactorConfirmation.id,
+          },
+        });
+      }
       return true;
     },
     async session({ session, token }) {
@@ -58,6 +74,9 @@ export const {
       if (token.role && session.user) {
         session.user.role = token.role;
       }
+      if (session.user) {
+        session.user.isTwoFactorEnabled = token.isTwoFactorEnabled;
+      }
       return session;
     },
     async jwt({ token }) {
@@ -65,6 +84,7 @@ export const {
       const exeistingUser = await getUserById(token.sub);
       if (!exeistingUser) return token;
       token.role = exeistingUser.role;
+      token.isTwoFactorEnabled = exeistingUser.isTwoFactorEnabled;
       return token;
     },
   },

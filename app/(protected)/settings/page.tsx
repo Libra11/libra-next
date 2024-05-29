@@ -4,25 +4,27 @@
  * LastEditors: Libra
  * Description:
  */
-import { auth, signOut } from "@/auth";
-import { TestButton } from "@/components/testButton";
+"use client";
+import { logout } from "@/actions/logout";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
-export default async function SettingsPage() {
-  const session = await auth();
+export default function SettingsPage() {
+  const router = useRouter();
+
+  const onClick = async () => {
+    await logout();
+    router.push("/auth/login");
+  };
+  const user = useCurrentUser();
+
   return (
     <div>
-      {JSON.stringify(session)}
-      <form
-        action={async () => {
-          "use server";
-          await signOut({
-            redirectTo: "/auth/login",
-          });
-        }}
-      >
-        <button type="submit">Sign out</button>
-      </form>
-      <TestButton label="Send mail" />
+      {JSON.stringify(user)}
+      <Button variant="secondary" onClick={onClick}>
+        Sign out
+      </Button>
     </div>
   );
 }

@@ -77,3 +77,18 @@ export const sendResetMail = async (to: string, token: string) => {
     console.error("send fail", error);
   }
 };
+
+export const sendTwoFactorMail = async (to: string, token: string) => {
+  try {
+    const transporter = await createTransporter();
+    const info = await transporter.sendMail({
+      from: process.env.EMAIL_USER, // sender address
+      to, // list of receivers
+      subject: "Two factor authentication", // Subject line
+      html: `<p>Your two factor token is ${token}</p>`, // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+  } catch (error) {
+    console.error("send fail", error);
+  }
+};
