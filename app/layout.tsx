@@ -9,6 +9,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import { ThemeProvider } from "@/providers/themeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,10 +25,14 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
   return (
-    <SessionProvider session={session}>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </SessionProvider>
+    <html lang="en" suppressHydrationWarning>
+      <SessionProvider session={session}>
+        <body className={inter.className}>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+          </ThemeProvider>
+        </body>
+      </SessionProvider>
+    </html>
   );
 }
