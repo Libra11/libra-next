@@ -1,5 +1,5 @@
 import { CustomHeader } from "@/components/customHeader";
-import { NavMenu } from "@/components/navMenu";
+import { NavMenu } from "@/components/navMenu/index";
 import { Toaster } from "@/components/ui/sonner";
 
 /**

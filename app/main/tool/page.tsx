@@ -23,28 +23,31 @@ import * as XLSX from "xlsx/xlsx.mjs";
 
 export default function ToolPage() {
   const [fileName, setFileName] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [answer, setAnswer] = useState<string | null>(null);
   const [oriData, setOriData] = useState("");
 
   const [sheetData, setSheetData] = useState([]); // [
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const transformData = (text: string) => {
-    text = text
-      .replace(/^(\d+)[、．．\s](\.?)/gm, "$1.")
-      .replace(/^([A-Z])[、．．\s](\.?)/gm, "$1.");
+    text = text.replace(/^(\d+)[、．．\s](\.?)/gm, "$1.");
+    text = text.replace(/([A-Z])[、．．\s](\.?)/gm, "$1.");
     let questionArr = text.split(/^\d+\.+/gm).slice(1);
-    return questionArr.map((item) => {
+    console.log(questionArr);
+    const data = questionArr.map((item) => {
       return item.split(
         new RegExp(answer ? `[A-Z][.]|${answer}` : `[A-Z][.]`, "gm")
       );
     });
+    console.log(data);
+    // 删除换行
+    return data;
   };
   const transformData2 = (text: string) => {
     text = text.replace(/^(\d+)[、．．\s](\.?)/gm, "$1.");
-    let questionArr = text.split(/^\d+\.+/gm).slice(1);
+    const questionArr = text.split(/^\d+\.+/gm).slice(1);
     return questionArr.map((item) => {
-      return item.split(answer && new RegExp(`${answer}`, "gm"));
+      return answer ? item.split(new RegExp(`${answer}`, "gm")) : [item];
     });
   };
   // 填空题
@@ -110,10 +113,12 @@ export default function ToolPage() {
     if (!selection) return;
     selection.removeAllRanges();
     selection.addRange(range);
+    console.log(selection);
     document.execCommand("copy");
     selection.removeAllRanges();
     toast("表格已复制到剪贴板");
   };
+
   return (
     <div>
       <Dialog open={isModalOpen}>

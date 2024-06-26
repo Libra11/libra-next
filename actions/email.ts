@@ -55,7 +55,7 @@ export const sendMail = async (to: string, token: string) => {
       from: process.env.EMAIL_USER, // sender address
       to, // list of receivers
       subject: "Confirm your email", // Subject line
-      html: `<p>Click <a href='http://localhost:3001/auth/new-verification?token=${token}'>here</a> to verify your email</p>`, // html body
+      html: `<p>Click <a href='http://penlibra.com:3001/auth/new-verification?token=${token}'>here</a> to verify your email</p>`, // html body
     });
     console.log("Message sent: %s", info.messageId);
   } catch (error) {
@@ -70,7 +70,7 @@ export const sendResetMail = async (to: string, token: string) => {
       from: process.env.EMAIL_USER, // sender address
       to, // list of receivers
       subject: "Reset your password", // Subject line
-      html: `<p>Click <a href='http://localhost:3001/auth/new-password?token=${token}'>here</a> to reset your password</p>`, // html body
+      html: `<p>Click <a href='http://penlibra.com:3001/auth/new-password?token=${token}'>here</a> to reset your password</p>`, // html body
     });
     console.log("Message sent: %s", info.messageId);
   } catch (error) {
