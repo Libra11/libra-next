@@ -31,12 +31,12 @@ export const NavMenuItem = ({
     <div
       className={`${
         isCollapsed ? "flex justify-center items-center" : ""
-      } w-full cursor-pointer my-2`}
+      } w-full cursor-pointer my-4`}
       onClick={goLink(item.link)}
     >
       <div
         className={`${
-          isCollapsed ? "w-12 justify-center" : "px-4"
+          isCollapsed ? "w-12 justify-center" : "px-4 mx-4"
         } flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointe ${
           isActive
             ? "bg-[hsl(var(--primary))] hover:!bg-[hsl(var(--primary))] text-white"

@@ -14,6 +14,7 @@ import {
   ExitIcon,
   GearIcon,
   HomeIcon,
+  MagicWandIcon,
 } from "@radix-ui/react-icons";
 import { NavMenuItem } from "./navMenuItem";
 import Image from "next/image";
@@ -29,14 +30,14 @@ const menuData = [
     link: "/main",
   },
   {
-    title: "Tool",
+    title: "WordToExcel",
     icon: <BackpackIcon width={20} height={20} />,
     link: "/main/tool",
   },
   {
-    title: "Setting",
-    icon: <GearIcon width={20} height={20} />,
-    link: "/main/setting",
+    title: "Gemini",
+    icon: <MagicWandIcon width={20} height={20} />,
+    link: "/main/gemini",
   },
 ];
 
@@ -51,7 +52,7 @@ export function NavMenu() {
     <nav
       className={`h-full ${
         isCollapsed ? "w-20" : "w-60"
-      } flex flex-col items-center border-r border-[hsl(var(--border))] py-4 px-2 transition-all`}
+      } flex flex-col items-center py-4 px-2 transition-all bg-[hsl(var(--background-nav))]`}
     >
       <div className="w-full flex-1">
         <div className="h-20 flex justify-center items-center mb-4">

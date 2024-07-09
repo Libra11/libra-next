@@ -4,12 +4,12 @@
  * LastEditors: Libra
  * Description:
  */
+"use client";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
@@ -19,14 +19,14 @@ export function BreadcrumbComponent() {
   pathName = pathName.slice(1);
 
   return (
-    <Breadcrumb>
+    <Breadcrumb className=" w-full bg-[hsl(var(--background-nav))] rounded-lg px-4 py-2 mb-2">
       <BreadcrumbList>
-        <BreadcrumbItem key="home">
+        <BreadcrumbItem key="home" className="ml-0">
           <BreadcrumbLink href="/">home</BreadcrumbLink>
           <BreadcrumbSeparator />
         </BreadcrumbItem>
         {pathName.split("/").map((item, index) => (
-          <BreadcrumbItem key={index}>
+          <BreadcrumbItem key={index} className="ml-0">
             <BreadcrumbLink href={`/${item}`}>{item}</BreadcrumbLink>
             {index !== pathName.split("/").length - 1 && (
               <BreadcrumbSeparator />

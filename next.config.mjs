@@ -6,7 +6,10 @@
  */
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone"
+  output: "standalone",
+  env: {
+    API_KEY: process.env.API_KEY,
+  },
 };
 
 export default nextConfig;

@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -20,6 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "sonner";
 import * as XLSX from "xlsx/xlsx.mjs";
+import "./page.css";
 
 export default function ToolPage() {
   const [fileName, setFileName] = useState("");
@@ -30,21 +30,18 @@ export default function ToolPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const transformData = (text: string) => {
-    text = text.replace(/^(\d+)[、．．\s](\.?)/gm, "$1.");
-    text = text.replace(/([A-Z])[、．．\s](\.?)/gm, "$1.");
+    text = text.replace(/^(\d+)[、．．](\.?)/gm, "$1.");
+    text = text.replace(/([A-Z])[、．．](\.?)/gm, "$1.");
     let questionArr = text.split(/^\d+\.+/gm).slice(1);
-    console.log(questionArr);
     const data = questionArr.map((item) => {
       return item.split(
         new RegExp(answer ? `[A-Z][.]|${answer}` : `[A-Z][.]`, "gm")
       );
     });
-    console.log(data);
-    // 删除换行
     return data;
   };
   const transformData2 = (text: string) => {
-    text = text.replace(/^(\d+)[、．．\s](\.?)/gm, "$1.");
+    text = text.replace(/^(\d+)[、．．](\.?)/gm, "$1.");
     const questionArr = text.split(/^\d+\.+/gm).slice(1);
     return questionArr.map((item) => {
       return answer ? item.split(new RegExp(`${answer}`, "gm")) : [item];
@@ -53,7 +50,7 @@ export default function ToolPage() {
   // 填空题
   const transformData3 = (text: string) => {
     text = text
-      .replace(/^(\d+)[、．．\s](\.?)/gm, "$1.")
+      .replace(/^(\d+)[、．．](\.?)/gm, "$1.")
       .replace(/[\uFF08-\uFF09]/g, (match) => (match === "\uFF08" ? "(" : ")"))
       .replace(/_{2,}/g, "()");
     let questionArr = text.split(/^\d+\.+/gm).slice(1);
@@ -120,19 +117,27 @@ export default function ToolPage() {
   };
 
   return (
-    <div>
-      <Dialog open={isModalOpen}>
+    <div className="p-4">
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-[800px]">
           <DialogHeader>
             <DialogTitle>试题列表</DialogTitle>
           </DialogHeader>
+          <div className="text-xl bg-slate-300 rounded-md p-2 text-center">
+            总题数：<span className="font-bold ">{sheetData.length}</span>
+          </div>
           <div className="max-h-[800px] overflow-auto">
             <Table>
               <TableBody>
                 {sheetData.map((row: string[], rowIndex) => (
                   <TableRow key={rowIndex}>
                     {row.map((cell, cellIndex) => (
-                      <TableCell key={cellIndex}>{cell}</TableCell>
+                      <TableCell
+                        key={cellIndex}
+                        className=" min-w-16 text-center"
+                      >
+                        <div className="text">{cell}</div>
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))}
@@ -140,14 +145,11 @@ export default function ToolPage() {
             </Table>
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsModalOpen(false)} variant="secondary">
-              取消
-            </Button>
-            <Button onClick={copyTable} variant="default">
+            <Button onClick={copyTable} variant="secondary">
               复制表格
             </Button>
             <Button onClick={checkAndExport} variant="default">
-              确认
+              导出Excel
             </Button>
           </DialogFooter>
         </DialogContent>

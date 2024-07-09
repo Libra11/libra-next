@@ -9,7 +9,6 @@ import { logout } from "@/actions/logout";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { ModeToggle } from "@/components/modeToggle";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -23,7 +22,6 @@ export default function SettingsPage() {
   return (
     <div>
       {JSON.stringify(user)}
-      <ModeToggle />
       <Button variant="secondary" onClick={onClick}>
         Sign out
       </Button>

@@ -1,3 +1,4 @@
+import { BreadcrumbComponent } from "@/components/breadcrumb";
 import { CustomHeader } from "@/components/customHeader";
 import { NavMenu } from "@/components/navMenu/index";
 import { Toaster } from "@/components/ui/sonner";
@@ -16,9 +17,12 @@ export default function MainLayout({
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <NavMenu />
-      <div className="flex-1 h-full flex flex-col justify-center items-center">
+      <div className="flex-1 h-full flex flex-col p-2 justify-center items-center bg-[hsl(var(--background-main))]">
         <CustomHeader />
-        <div className="flex-1 w-full p-4">{children}</div>
+        <BreadcrumbComponent />
+        <div className="flex-1 w-full pb-4 h-0 bg-[hsl(var(--background-nav))] rounded-lg">
+          {children}
+        </div>
       </div>
       <Toaster />
     </div>
