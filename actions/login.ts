@@ -51,7 +51,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     return {
       code: 0,
       message: "Confirmation email sent!",
-      data: verificationToken,
+      data: exeistingUser.isTwoFactorEnabled,
     };
   }
 

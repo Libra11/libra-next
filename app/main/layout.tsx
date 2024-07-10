@@ -20,9 +20,7 @@ export default function MainLayout({
       <div className="flex-1 h-full flex flex-col p-2 justify-center items-center bg-[hsl(var(--background-main))]">
         <CustomHeader />
         <BreadcrumbComponent />
-        <div className="flex-1 w-full pb-4 h-0 bg-[hsl(var(--background-nav))] rounded-lg">
-          {children}
-        </div>
+        <div className="flex-1 w-full h-0">{children}</div>
       </div>
       <Toaster />
     </div>

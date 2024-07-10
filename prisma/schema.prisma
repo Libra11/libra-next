@@ -48,6 +48,7 @@ model User {
   accounts      Account[]
   isTwoFactorEnabled Boolean @default(false)
   twoFactorConfirmationCode twoFactorConfirmation?
+  sessions      Session[]
 
   @@map("users")
 }
@@ -80,4 +81,23 @@ model twoFactorConfirmation {
   userId    String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId])
+}
+
+model Session {
+  id        String      @id @default(cuid())
+  userId    String   
+  name      String   @default("New Session")
+  createdAt DateTime @db.Timestamp
+  updatedAt DateTime @db.Timestamp
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  sessionId String   
+  sender    String   @db.VarChar(255)
+  content   String   @db.Text
+  createdAt DateTime @db.Timestamp
+  session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }

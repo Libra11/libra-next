@@ -117,7 +117,7 @@ export default function ToolPage() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-[hsl(var(--background-nav))] rounded-lg h-full">
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent className="max-w-[800px]">
           <DialogHeader>
