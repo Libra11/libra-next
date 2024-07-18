@@ -82,3 +82,19 @@ export const DeleteSession = async (sessionId: string) => {
     return false;
   }
 };
+
+export const updateSessionName = async (sessionId: string, name: string) => {
+  try {
+    await db.session.update({
+      where: {
+        id: sessionId,
+      },
+      data: {
+        name,
+      },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};

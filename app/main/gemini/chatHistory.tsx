@@ -9,6 +9,7 @@ import { MarkDownComponent } from "@/components/markdown";
 import { MagicWandIcon } from "@radix-ui/react-icons";
 import { useEffect } from "react";
 import { Content } from "@google/generative-ai";
+import { GeminiIcon } from "@/components/icon/geminiIcon";
 
 interface ChatHistoryProps {
   history: Content[];
@@ -64,7 +65,7 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
 
           {item.role === "model" ? (
             <div className="w-12 h-12 ml-2 mt-6 rounded-full bg-[hsl(var(--primary))] text-white flex justify-center items-center">
-              <MagicWandIcon />
+              <GeminiIcon width={24} height={24} />
             </div>
           ) : null}
         </div>

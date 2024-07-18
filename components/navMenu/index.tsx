@@ -7,12 +7,9 @@
 "use client";
 import {
   BackpackIcon,
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  ChevronUpIcon,
   ExitIcon,
-  GearIcon,
   HomeIcon,
   MagicWandIcon,
 } from "@radix-ui/react-icons";
@@ -22,6 +19,7 @@ import { Button } from "../ui/button";
 import { logout } from "@/actions/logout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { GeminiIcon } from "@/components/icon/geminiIcon";
 
 const menuData = [
   {
@@ -36,7 +34,7 @@ const menuData = [
   },
   {
     title: "Gemini",
-    icon: <MagicWandIcon width={20} height={20} />,
+    icon: <GeminiIcon width={24} height={24} />,
     link: "/main/gemini",
   },
 ];
@@ -57,10 +55,10 @@ export function NavMenu() {
       <div className="w-full flex-1">
         <div className="h-20 flex justify-center items-center mb-4">
           <Image
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
+            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff40]"
             src="/Libra.svg"
             alt="Libra Logo"
-            width={80}
+            width={`${isCollapsed ? 40 : 60}`}
             height={29}
             priority
           />

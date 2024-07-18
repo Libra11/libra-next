@@ -6,6 +6,7 @@ root,
 html,
 body {
   height: 100%;
+  line-height: 2;
 }
 
 @layer base {

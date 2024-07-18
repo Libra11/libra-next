@@ -5,7 +5,7 @@
  * Description:
  */
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import React, { useState } from "react";
 
@@ -17,19 +17,19 @@ interface MessageInputProps {
 export function MessageInput({ onSendMessage, isPending }: MessageInputProps) {
   const [msg, setMsg] = useState("");
 
-  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "Enter" && !isPending && msg.trim()) {
+  function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (event.key === "Enter" && !event.shiftKey && !isPending && msg.trim()) {
       onSendMessage(msg);
       setMsg("");
     }
   }
 
   return (
-    <div className="w-[800px] flex justify-center items-center relative mb-2">
-      <Input
+    <div className="w-[800px] rounded-lg min-h-12 border border-[hsl(var(--primary))]  flex justify-center items-center my-2">
+      <Textarea
         value={msg}
         onChange={(e) => setMsg(e.target.value)}
-        className="w-full rounded-full h-12 pl-4"
+        className="flex-1 p-0 pl-4 min-h-10 py-1 border-none shadow-none outline-none focus-visible:ring-0"
         placeholder="☺Type your message to Gemini..."
         onKeyDown={handleKeyDown}
       />
@@ -39,7 +39,7 @@ export function MessageInput({ onSendMessage, isPending }: MessageInputProps) {
           setMsg("");
         }}
         disabled={isPending || !msg}
-        className="h-10 absolute right-1 top-1 rounded-full w-24 p-0"
+        className="h-10 rounded-lg w-24 p-0 mr-1"
       >
         Send <PaperPlaneIcon className="ml-2" width={18} height={18} />
       </Button>

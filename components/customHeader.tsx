@@ -17,7 +17,7 @@ import {
 } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { GearIcon, InfoCircledIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
 import { useTheme } from "next-themes";
@@ -29,6 +29,7 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { changeUserInfo } from "@/actions/user/modify";
+import { collapseContext } from "@/app/main/layout";
 
 export function CustomHeader() {
   const user = useCurrentUser();
@@ -47,6 +48,7 @@ export function CustomHeader() {
       setIsTwoFactorEnabled(value);
     }
   };
+  const collapse = useContext(collapseContext);
   return (
     <>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -109,7 +111,11 @@ export function CustomHeader() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-      <header className="w-full flex justify-between items-center px-4 py-2 bg-[hsl(var(--background-nav))] rounded-lg mb-2">
+      <header
+        className={`w-full flex justify-between items-center px-4 py-2 bg-[hsl(var(--background-nav))] transition-all rounded-lg mb-2 ${
+          collapse ? "max-h-0 overflow-hidden px-0 py-0 mb-0" : ""
+        } `}
+      >
         {/* <BreadcrumbComponent /> */}
         <div className="flex flex-col justify-center items-start">
           <span className="font-bold text-2xl mb-1">Dashboard</span>

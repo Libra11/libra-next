@@ -5,6 +5,7 @@
  * Description:
  */
 "use client";
+import { collapseContext } from "@/app/main/layout";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,13 +14,18 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { usePathname } from "next/navigation";
+import { useContext } from "react";
 
 export function BreadcrumbComponent() {
   let pathName = usePathname();
   pathName = pathName.slice(1);
-
+  const collapse = useContext(collapseContext);
   return (
-    <Breadcrumb className=" w-full bg-[hsl(var(--background-nav))] rounded-lg px-4 py-2 mb-2">
+    <Breadcrumb
+      className={`w-full bg-[hsl(var(--background-nav))] rounded-lg px-4 py-2 mb-2 transition-all ${
+        collapse ? "max-h-0 overflow-hidden px-0 py-0 mb-0" : ""
+      } `}
+    >
       <BreadcrumbList>
         <BreadcrumbItem key="home" className="ml-0">
           <BreadcrumbLink href="/">home</BreadcrumbLink>
