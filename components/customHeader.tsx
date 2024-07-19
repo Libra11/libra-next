@@ -112,8 +112,8 @@ export function CustomHeader() {
         </DialogContent>
       </Dialog>
       <header
-        className={`w-full flex justify-between items-center px-4 py-2 bg-[hsl(var(--background-nav))] transition-all rounded-lg mb-2 ${
-          collapse ? "max-h-0 overflow-hidden px-0 py-0 mb-0" : ""
+        className={`w-full flex justify-between items-center bg-[hsl(var(--background-nav))] transition-all rounded-lg ${
+          collapse ? "max-h-0 overflow-hidden" : "px-4 py-2 mb-2"
         } `}
       >
         {/* <BreadcrumbComponent /> */}

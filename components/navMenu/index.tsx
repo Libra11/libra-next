@@ -6,12 +6,10 @@
  */
 "use client";
 import {
-  BackpackIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   ExitIcon,
   HomeIcon,
-  MagicWandIcon,
 } from "@radix-ui/react-icons";
 import { NavMenuItem } from "./navMenuItem";
 import Image from "next/image";
@@ -19,18 +17,13 @@ import { Button } from "../ui/button";
 import { logout } from "@/actions/logout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { GeminiIcon } from "@/components/icon/geminiIcon";
+import GeminiIcon from "@/public/gemini.svg";
 
 const menuData = [
   {
     title: "Dashboard",
     icon: <HomeIcon width={20} height={20} />,
     link: "/main",
-  },
-  {
-    title: "WordToExcel",
-    icon: <BackpackIcon width={20} height={20} />,
-    link: "/main/tool",
   },
   {
     title: "Gemini",

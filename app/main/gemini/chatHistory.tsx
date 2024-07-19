@@ -6,10 +6,9 @@
  */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MarkDownComponent } from "@/components/markdown";
-import { MagicWandIcon } from "@radix-ui/react-icons";
 import { useEffect } from "react";
 import { Content } from "@google/generative-ai";
-import { GeminiIcon } from "@/components/icon/geminiIcon";
+import GeminiIcon from "@/public/gemini.svg";
 
 interface ChatHistoryProps {
   history: Content[];

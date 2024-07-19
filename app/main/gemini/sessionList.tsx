@@ -4,10 +4,10 @@
  * LastEditors: Libra
  * Description:
  */
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ModifySessionName } from "@/actions/gemini/update-session-name";
-import { DeleteIcon } from "@/components/icon/deleteIcon";
-import { RenameIcon } from "@/components/icon/renameIcon";
+import DeleteIcon from "@/public/delete.svg";
+import RenameIcon from "@/public/rename.svg";
 import { Input } from "@/components/ui/input";
 import {
   Popover,

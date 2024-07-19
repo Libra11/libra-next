@@ -7,8 +7,8 @@
 "use client";
 import { BreadcrumbComponent } from "@/components/breadcrumb";
 import { CustomHeader } from "@/components/customHeader";
-import { FullscreenExitIcon } from "@/components/icon/fullscreenExitIcon";
-import { FullscreenIcon } from "@/components/icon/fullscreenIcon";
+import FullscreenIcon from "@/public/fullscreen.svg";
+import FullscreenExitIcon from "@/public/fullscreen_exit_line.svg";
 import { NavMenu } from "@/components/navMenu/index";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
