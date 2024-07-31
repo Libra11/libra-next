@@ -101,3 +101,27 @@ model Message {
   createdAt DateTime @db.Timestamp
   session   Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 }
+
+model Phonetic {
+  id      Int      @id @default(autoincrement())
+  name    String
+  value   String
+  phonetic String
+  wordId  Int
+  word    Word     @relation(fields: [wordId], references: [id])
+}
+
+model Translation {
+  id     Int    @id @default(autoincrement())
+  pos    String
+  trans  String
+  wordId Int
+  word   Word   @relation(fields: [wordId], references: [id])
+}
+
+model Word {
+  id               Int            @id @default(autoincrement())
+  textContent      String        @unique
+  phoneticsArray   Phonetic[]
+  translationsArray Translation[]
+}

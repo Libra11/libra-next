@@ -18,6 +18,7 @@ import { logout } from "@/actions/logout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import GeminiIcon from "@/public/gemini.svg";
+import EnglishIcon from "@/public/english.svg";
 
 const menuData = [
   {
@@ -29,6 +30,11 @@ const menuData = [
     title: "Gemini",
     icon: <GeminiIcon width={24} height={24} />,
     link: "/main/gemini",
+  },
+  {
+    title: "English",
+    icon: <EnglishIcon width={24} height={24} />,
+    link: "/main/english",
   },
 ];
 

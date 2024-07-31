@@ -20,6 +20,11 @@ export function BreadcrumbComponent() {
   let pathName = usePathname();
   pathName = pathName.slice(1);
   const collapse = useContext(collapseContext);
+
+  // Split the path and accumulate it step by step
+  const pathSegments = pathName.split("/");
+  let accumulatedPath = "";
+
   return (
     <Breadcrumb
       className={`w-full bg-[hsl(var(--background-nav))] rounded-lg transition-all ${
@@ -31,14 +36,15 @@ export function BreadcrumbComponent() {
           <BreadcrumbLink href="/">home</BreadcrumbLink>
           <BreadcrumbSeparator />
         </BreadcrumbItem>
-        {pathName.split("/").map((item, index) => (
-          <BreadcrumbItem key={index} className="ml-0">
-            <BreadcrumbLink href={`/${item}`}>{item}</BreadcrumbLink>
-            {index !== pathName.split("/").length - 1 && (
-              <BreadcrumbSeparator />
-            )}
-          </BreadcrumbItem>
-        ))}
+        {pathSegments.map((item, index) => {
+          accumulatedPath += `/${item}`;
+          return (
+            <BreadcrumbItem key={index} className="ml-0">
+              <BreadcrumbLink href={accumulatedPath}>{item}</BreadcrumbLink>
+              {index !== pathSegments.length - 1 && <BreadcrumbSeparator />}
+            </BreadcrumbItem>
+          );
+        })}
       </BreadcrumbList>
     </Breadcrumb>
   );

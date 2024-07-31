@@ -16,7 +16,16 @@ const nextConfig = {
       use: [{loader: '@svgr/webpack', options: {icon: true}}]
     })
     return config
-}
+  },
+  async redirects() {
+    return [
+      {
+          source: '/main/english',
+          destination: '/main/english/word',
+          permanent: true,
+      },
+    ];
+  }
 };
 
 export default nextConfig;

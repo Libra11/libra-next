@@ -20,7 +20,10 @@ export const NavMenuItem = ({
 }) => {
   const pathName = usePathname();
 
-  const isActive = item.link === pathName;
+  const isActive =
+    pathName === "/main"
+      ? pathName === item.link
+      : pathName.includes(item.link) && item.link !== "/main";
   const router = useRouter();
 
   const goLink = (link: string) => () => {
