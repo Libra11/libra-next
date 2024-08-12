@@ -50,20 +50,37 @@ export const getWord = async (textContent: string) => {
 
 export const addWords = async (words: Word[]) => {
   try {
-    const res = await db.word.createMany({
-      data: words.map((word) => ({
-        textContent: word.textContent,
-        phoneticsArray: {
-          create: word.phoneticsArray,
-        },
-        translationsArray: {
-          create: word.translationsArray,
-        },
-      })),
-    });
-    console.log("success", res);
+    const res = await Promise.all(
+      words.map(async (word) => {
+        // 检查是否已经存在相同的 textContent
+        const existingWord = await db.word.findUnique({
+          where: {
+            textContent: word.textContent,
+          },
+        });
+
+        if (existingWord) {
+          // 如果已经存在，则跳过插入
+          return existingWord;
+        } else {
+          // 如果不存在，则进行插入
+          return await db.word.create({
+            data: {
+              textContent: word.textContent,
+              phoneticsArray: {
+                create: word.phoneticsArray,
+              },
+              translationsArray: {
+                create: word.translationsArray,
+              },
+            },
+          });
+        }
+      })
+    );
     return res;
   } catch (error) {
+    console.log("error", error);
     return null;
   }
 };

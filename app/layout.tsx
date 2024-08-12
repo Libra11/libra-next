@@ -10,6 +10,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { ThemeProvider } from "@/providers/themeProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Montserrat({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default async function RootLayout({
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
           </ThemeProvider>
+          <Toaster />
         </body>
       </SessionProvider>
     </html>

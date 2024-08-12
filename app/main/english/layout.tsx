@@ -7,6 +7,7 @@
 "use client";
 import { NavMenuItem } from "@/components/navMenu/navMenuItem";
 import WordIcon from "@/public/word.svg";
+import PhraseIcon from "@/public/phrase.svg";
 import { useState } from "react";
 
 export default function EnglishLayout({
@@ -19,6 +20,11 @@ export default function EnglishLayout({
       title: "Word",
       icon: <WordIcon width={20} height={20} />,
       link: "/main/english/word",
+    },
+    {
+      title: "Phrase",
+      icon: <PhraseIcon width={20} height={20} />,
+      link: "/main/english/phrase",
     },
   ];
   const [isCollapsed, setIsCollapsed] = useState(false);

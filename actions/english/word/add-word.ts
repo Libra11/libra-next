@@ -8,8 +8,26 @@
 
 import { code } from "@/common/code";
 import { addWord } from "@/data/english";
-import { getWordsFromYouDao } from "@/lib/puppeteer-crawler";
-// import fs from "fs";
+import { Word, getWordsFromYouDao } from "@/lib/puppeteer-crawler";
+import fs from "fs";
+
+let infoCache: Word[] = [];
+
+function appendDataToJson(filePath: string, info: Word, end: string) {
+  infoCache.push(info);
+  console.log(info.textContent);
+  if (info.textContent === end) {
+    // 将缓存中的数据写入文件
+    fs.writeFile(filePath, JSON.stringify(infoCache), (err) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      console.log("write success");
+      infoCache = []; // 清空缓存
+    });
+  }
+}
 
 export const addWordApi = async (word: string) => {
   try {
@@ -17,21 +35,7 @@ export const addWordApi = async (word: string) => {
     await new Promise((resolve) => setTimeout(resolve, 300));
     await addWord(info);
     // write info to ./test.json
-    // fs.readFile("./test.json", "utf-8", (err, data) => {
-    //   if (err) {
-    //     console.log(err);
-    //     return;
-    //   }
-    //   let oldData = JSON.parse(data);
-    //   oldData.push(info);
-    //   fs.writeFile("./test.json", JSON.stringify(oldData), (err) => {
-    //     if (err) {
-    //       console.log(err);
-    //       return;
-    //     }
-    //     console.log("write success");
-    //   });
-    // });
+    // appendDataToJson("./test.json", info, "versatility");
 
     return {
       code: 0,

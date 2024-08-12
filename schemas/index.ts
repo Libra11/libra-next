@@ -39,3 +39,12 @@ export const NewPasswordSchema = z.object({
     message: "Minimum 6 characters required",
   }),
 });
+
+export const InterviewQuestionSchema = z.object({
+  category: z.string(),
+  questionText: z.string(),
+  answerContent: z.string(),
+  tags: z.array(z.string()),
+  difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
+  isActive: z.optional(z.boolean()),
+});

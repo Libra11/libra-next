@@ -20,12 +20,12 @@ const nextConfig = {
   async redirects() {
     return [
       {
-          source: '/main/english',
-          destination: '/main/english/word',
-          permanent: true,
-      },
+        source: '/main/english',
+        destination: '/main/english/word',
+        permanent: true,
+      }
     ];
-  }
+  },
 };
 
 export default nextConfig;

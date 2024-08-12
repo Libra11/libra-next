@@ -38,9 +38,11 @@ export default function WordPage() {
   const [importFile, setImportFile] = useState<File | null>(null);
   const { playAudio } = useAudioCache();
   const curUser = useCurrentUser();
+  const [isFirst, setIsFirst] = useState(true);
 
   const getWord = async (word: string) => {
     const res = await getWordApi(word);
+    setIsFirst(false);
     if (res.code === 0) {
       setWordData(res.data as Word);
     } else {
@@ -122,12 +124,12 @@ export default function WordPage() {
 
       {wordData ? (
         <WordDisplay wordData={wordData} playAudio={playAudio} />
-      ) : (
+      ) : !isFirst ? (
         <div className="mt-20 text-white w-[800px] bg-[hsl(var(--primary))] rounded-lg px-4 py-2 flex justify-start items-center">
           <WarnIcon className="mr-2 text-red-500" width={32} height={32} />
           <div className="flex-1">No word data found</div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

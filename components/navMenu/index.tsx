@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import GeminiIcon from "@/public/gemini.svg";
 import EnglishIcon from "@/public/english.svg";
+import InterviewIcon from "@/public/interview.svg";
 
 const menuData = [
   {
@@ -35,6 +36,11 @@ const menuData = [
     title: "English",
     icon: <EnglishIcon width={24} height={24} />,
     link: "/main/english",
+  },
+  {
+    title: "Interview",
+    icon: <InterviewIcon width={24} height={24} />,
+    link: "/main/interview",
   },
 ];
 

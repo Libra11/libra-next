@@ -158,3 +158,52 @@ li {
   list-style-type: disc;
   margin-left: 20px;
 }
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  margin: 1rem 0;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 1.75rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1rem;
+}
+
+h5 {
+  font-size: 0.875rem;
+}
+
+code {
+  background-color: hsl(var(--primary));
+  border-radius: 0.25rem;
+  margin: 0 0.25rem;
+  padding: 0.1rem 0.5rem;
+  color: hsl(var(--primary-foreground));
+}
+
+pre code {
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+blockquote {
+  border-left: 4px solid hsl(var(--primary));
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+}

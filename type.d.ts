@@ -4,4 +4,3 @@
  * @LastEditors: Libra
  * @Description:
  */
-declare module "xlsx/xlsx.mjs";
