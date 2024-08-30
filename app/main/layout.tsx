@@ -35,7 +35,7 @@ export default function MainLayout({
   }, [pathname, searchParams]);
   return (
     <collapseContext.Provider value={collapse}>
-      <div className="w-screen h-screen flex justify-center items-center relative">
+      <div className="w-screen h-dvh flex justify-center items-center relative">
         <NavMenu />
         <div className="flex-1 h-full flex flex-col p-2 justify-center items-center bg-[hsl(var(--background-main))]">
           <CustomHeader />

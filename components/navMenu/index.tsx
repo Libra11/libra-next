@@ -21,7 +21,7 @@ import GeminiIcon from "@/public/gemini.svg";
 import EnglishIcon from "@/public/english.svg";
 import InterviewIcon from "@/public/interview.svg";
 
-const menuData = [
+export const menuData = [
   {
     title: "Dashboard",
     icon: <HomeIcon width={20} height={20} />,
@@ -55,7 +55,7 @@ export function NavMenu() {
     <nav
       className={`h-full ${
         isCollapsed ? "w-20" : "w-60"
-      } flex flex-col items-center py-4 px-2 transition-all bg-[hsl(var(--background-nav))]`}
+      } flex flex-col items-center py-4 px-2 transition-all bg-[hsl(var(--background-nav))] max-sm:hidden`}
     >
       <div className="w-full flex-1">
         <div className="h-20 flex justify-center items-center mb-4">

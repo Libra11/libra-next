@@ -7,7 +7,7 @@
 "use client";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { BreadcrumbComponent } from "./breadcrumb";
+import LibraIcon from "@/public/Libra.svg";
 import {
   Dialog,
   DialogFooter,
@@ -16,7 +16,7 @@ import {
   DialogContent,
 } from "./ui/dialog";
 import { Button } from "./ui/button";
-import { GearIcon, InfoCircledIcon } from "@radix-ui/react-icons";
+import { ExitIcon, GearIcon, InfoCircledIcon } from "@radix-ui/react-icons";
 import { useContext, useEffect, useState } from "react";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { Label } from "./ui/label";
@@ -30,11 +30,26 @@ import {
 } from "./ui/tooltip";
 import { changeUserInfo } from "@/actions/user/modify";
 import { collapseContext } from "@/app/main/layout";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { menuData } from "./navMenu";
+import { NavMenuItem } from "./navMenu/navMenuItem";
+import { useRouter } from "next/navigation";
+import { logout } from "@/actions/logout";
 
 export function CustomHeader() {
   const user = useCurrentUser();
   const image = user?.image;
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isTwoFactorEnabled, setIsTwoFactorEnabled] = useState(
     user?.isTwoFactorEnabled
   );
@@ -49,10 +64,15 @@ export function CustomHeader() {
     }
   };
   const collapse = useContext(collapseContext);
+  const router = useRouter();
+  const logoutClick = async () => {
+    await logout();
+    router.push("/auth/login");
+  };
   return (
     <>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent>
+        <DialogContent className="max-sm:w-11/12">
           <DialogHeader>
             <DialogTitle>Setting</DialogTitle>
           </DialogHeader>
@@ -111,14 +131,61 @@ export function CustomHeader() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
       <header
         className={`w-full flex justify-between items-center bg-[hsl(var(--background-nav))] transition-all rounded-lg ${
           collapse ? "max-h-0 overflow-hidden" : "px-4 py-2 mb-2"
         } `}
       >
-        {/* <BreadcrumbComponent /> */}
         <div className="flex flex-col justify-center items-start">
-          <span className="font-bold text-2xl mb-1">Dashboard</span>
+          <Drawer
+            direction="right"
+            open={isDrawerOpen}
+            onOpenChange={(open) => setIsDrawerOpen(open)}
+          >
+            <span className="font-bold text-2xl mb-1 max-sm:hidden">
+              Dashboard
+            </span>
+            <DrawerTrigger>
+              <span className="font-bold text-2xl mb-1 sm:hidden">
+                Dashboard
+              </span>
+            </DrawerTrigger>
+            <DrawerContent
+              className="top-0 right-0 left-auto mt-0 w-[240px] rounded-none"
+              showBar={false}
+            >
+              <DrawerHeader>
+                <DrawerTitle></DrawerTitle>
+                <DrawerDescription className="flex justify-center items-center">
+                  <LibraIcon className="w-16 h-16" />
+                </DrawerDescription>
+              </DrawerHeader>
+              <div className="flex flex-col justify-center items-center h-full">
+                <div className="flex-1 w-full">
+                  {menuData.map((item, index) => (
+                    <NavMenuItem
+                      key={index}
+                      item={item}
+                      isCollapsed={false}
+                      onClick={() => setIsDrawerOpen(false)}
+                    />
+                  ))}
+                </div>
+                <DrawerFooter>
+                  <Button
+                    variant="secondary"
+                    onClick={logoutClick}
+                    className="w-full"
+                  >
+                    <ExitIcon className="mr-2" />
+                    Sign out
+                  </Button>
+                </DrawerFooter>
+              </div>
+            </DrawerContent>
+          </Drawer>
+
           <span className=" text-[hsl(var(--muted-foreground))]">
             {new Date().toDateString()}
           </span>

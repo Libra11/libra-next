@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogContent,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -110,6 +111,8 @@ const AddQuestionDialog = ({
       }
       setIsOpen(false);
       updateQuestionInList(Number(data.category));
+      setSuccess("");
+      setError("");
     });
   };
 
@@ -144,19 +147,38 @@ const AddQuestionDialog = ({
   );
 
   useEffect(() => {
-    (async () => {
+    const loadQuestion = async (id: number) => {
+      console.log("loadQuestion");
       await getTags();
       await getCategories();
-      if (currentQuestionId) {
-        await getQuestionById(currentQuestionId);
+      if (id) {
+        await getQuestionById(id);
       }
-    })();
-  }, [currentQuestionId, getQuestionById]);
+    };
+    loadQuestion(currentQuestionId);
+    !currentQuestionId && form.reset();
+  }, [currentQuestionId, getQuestionById, form]);
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(isOpen: boolean) => {
+        setIsOpen(isOpen);
+        setError("");
+        setSuccess("");
+        if (!isOpen) {
+          // radix-ui dialog bug
+          // https://github.com/radix-ui/primitives/issues/1241
+          setTimeout(() => {
+            document.body.style.pointerEvents = "auto";
+          }, 1000);
+        }
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Question</DialogTitle>
+          <DialogDescription></DialogDescription>
         </DialogHeader>
         <div>
           <Form {...form}>

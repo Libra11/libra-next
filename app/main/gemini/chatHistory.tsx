@@ -36,7 +36,7 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
           key={index}
         >
           {item.role === "user" ? (
-            <Avatar className=" mr-2 w-12 h-12 mt-6">
+            <Avatar className=" mr-2 w-12 h-12 mt-6 max-sm:hidden">
               <AvatarImage src={userImage || undefined} />
               <AvatarFallback className="bg-[hsl(var(--background-main))] text-xl">
                 L
@@ -50,7 +50,7 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
               item.role === "user"
                 ? "bg-[hsl(var(--secondary))]"
                 : "bg-[hsl(var(--primary))] text-white"
-            } rounded-xl p-4 my-2 max-w-full flex-1`}
+            } rounded-xl p-4 my-2 max-w-full flex-1 myClass`}
           >
             <span className=" font-bold">
               {item.role === "user" ? "Me" : "Gemini"}
@@ -63,7 +63,7 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
           </div>
 
           {item.role === "model" ? (
-            <div className="w-12 h-12 ml-2 mt-6 rounded-full bg-[hsl(var(--primary))] text-white flex justify-center items-center">
+            <div className="w-12 h-12 ml-2 mt-6 rounded-full bg-[hsl(var(--primary))] text-white flex justify-center items-center max-sm:hidden">
               <GeminiIcon width={24} height={24} />
             </div>
           ) : null}

@@ -4,7 +4,7 @@
  * @LastEditors: Libra
  * @Description:
  */
-import { useState, useEffect, useRef, useTransition } from "react";
+import { useState, useEffect, useRef, useTransition, useCallback } from "react";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import {
   Content,
@@ -44,10 +44,6 @@ export default function useGeminiChat() {
   const textRef = useRef("");
   const indexRef = useRef(0);
   const user = useCurrentUser();
-
-  useEffect(() => {
-    getAllSessions();
-  }, []);
 
   async function run(msg: string) {
     let session: Session | null = null;
@@ -107,7 +103,7 @@ export default function useGeminiChat() {
     }
   }
 
-  async function getAllSessions() {
+  const getAllSessions = useCallback(async () => {
     const res = await getSessions(user?.id!);
     if (res.code === 0) {
       const session = res.data;
@@ -118,7 +114,7 @@ export default function useGeminiChat() {
     } else {
       console.error(res.message);
     }
-  }
+  }, [user?.id]);
 
   async function addNewMessage(
     sessionId: string,
@@ -169,6 +165,10 @@ export default function useGeminiChat() {
     setCurrentSession(sessions.find((session) => session.id === id) ?? null);
     await getAllMessages(id);
   }
+
+  useEffect(() => {
+    getAllSessions();
+  }, [getAllSessions]);
 
   return {
     history,

@@ -14,11 +14,13 @@ interface MenuDataProps {
 export const NavMenuItem = ({
   item,
   isCollapsed,
+  onClick,
 }: {
   item: MenuDataProps;
   isCollapsed: boolean;
+  onClick?: () => void;
 }) => {
-  const pathName = usePathname();
+  let pathName = usePathname();
 
   const isActive =
     pathName === "/main"
@@ -28,6 +30,7 @@ export const NavMenuItem = ({
 
   const goLink = (link: string) => () => {
     link && router.push(link);
+    onClick && onClick();
   };
 
   return (

@@ -73,7 +73,17 @@ const TagDialog = ({
   }, []);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(isOpen: boolean) => {
+        setIsOpen(isOpen);
+        if (!isOpen) {
+          setTimeout(() => {
+            document.body.style.pointerEvents = "auto";
+          }, 1000);
+        }
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Tag</DialogTitle>

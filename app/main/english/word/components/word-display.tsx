@@ -15,8 +15,8 @@ const WordDisplay = ({
   playAudio: any;
 }) => {
   return (
-    <div className=" w-[800px] flex flex-col justify-center items-start">
-      <div className="mt-20 mb-8 font-bold text-3xl">
+    <div className=" w-[800px] flex flex-col justify-center items-start max-sm:w-full">
+      <div className="mt-20 mb-8 font-bold text-3xl max-sm:mt-10">
         {wordData?.textContent}
       </div>
       <div className="flex justify-start items-center text-sm">

@@ -15,17 +15,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import AddWordDialog from "@/app/main/english/word/components/add-word-dialog";
-import UploadAudioDialog from "@/app/main/english/word/components/upload-audio-dialog";
-import WordDisplay from "@/app/main/english/word/components/word-display";
+// import AddWordDialog from "@/app/main/english/word/components/add-word-dialog";
+// import UploadAudioDialog from "@/app/main/english/word/components/upload-audio-dialog";
+// import WordDisplay from "@/app/main/english/word/components/word-display";
 import useAudioCache from "@/hooks/useAudioCache";
 import { Word } from "@/lib/puppeteer-crawler";
 import SearchIcon from "@/public/search.svg";
 import WarnIcon from "@/public/warning.svg";
 import Image from "next/image";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
-import ImportWordDialog from "./components/import-word-dialog";
+// import ImportWordDialog from "./components/import-word-dialog";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+
+import dynamic from "next/dynamic";
+
+const AddWordDialog = dynamic(() => import("./components/add-word-dialog"));
+const UploadAudioDialog = dynamic(
+  () => import("./components/upload-audio-dialog")
+);
+const WordDisplay = dynamic(() => import("./components/word-display"));
+
+const ImportWordDialog = dynamic(
+  () => import("./components/import-word-dialog")
+);
 
 export default function WordPage() {
   const [word, setWord] = useState("");
@@ -106,7 +118,7 @@ export default function WordPage() {
           priority
         />
       </div>
-      <div className="w-[800px] rounded-lg min-h-12 border border-[hsl(var(--primary))]  flex justify-center items-center my-2">
+      <div className="w-[800px] rounded-lg min-h-12 border border-[hsl(var(--primary))]  flex justify-center items-center my-2 max-sm:w-full">
         <Input
           placeholder="type the word you want to search"
           value={word}

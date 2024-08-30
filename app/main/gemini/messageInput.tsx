@@ -25,7 +25,7 @@ export function MessageInput({ onSendMessage, isPending }: MessageInputProps) {
   }
 
   return (
-    <div className="w-[800px] rounded-lg min-h-12 border border-[hsl(var(--primary))]  flex justify-center items-center my-2">
+    <div className="w-[800px] rounded-lg min-h-12 border border-[hsl(var(--primary))]  flex justify-center items-center my-2 max-sm:w-11/12">
       <Textarea
         value={msg}
         onChange={(e) => setMsg(e.target.value)}

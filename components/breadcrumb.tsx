@@ -28,7 +28,7 @@ export function BreadcrumbComponent() {
   return (
     <Breadcrumb
       className={`w-full bg-[hsl(var(--background-nav))] rounded-lg transition-all ${
-        collapse ? "max-h-0 overflow-hidden" : "px-4 py-2 mb-2"
+        collapse ? "max-h-0 overflow-hidden" : "px-4 py-2 mb-2 max-sm:hidden"
       } `}
     >
       <BreadcrumbList>

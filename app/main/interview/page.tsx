@@ -12,28 +12,53 @@ import OperatorIcon from "@/public/operator.svg";
 import DeleteIcon from "@/public/delete.svg";
 import EditIcon from "@/public/edit.svg";
 import { useCallback, useEffect, useState } from "react";
-import AddQuestionDialog from "./components/add-question-dialog";
+import { Category } from "@prisma/client";
+import { getCategoriesApi } from "@/actions/interview/category/get-categories";
+import { getQuestionsByCategoryApi } from "@/actions/interview/question/get-questions";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useToast } from "@/components/ui/use-toast";
+
+import dynamic from "next/dynamic";
+
+const AddQuestionDialog = dynamic(
+  () => import("./components/add-question-dialog")
+);
+const TagDialog = dynamic(() => import("./components/tag-dialog"));
+const CategoryDialog = dynamic(() => import("./components/category-dialog"));
+const RemoveQuestionDialog = dynamic(
+  () => import("./components/remove-question-dialog"),
+  { ssr: false }
+);
+const MarkDownComponent = dynamic(() =>
+  import("@/components/markdown").then((mod) => mod.MarkDownComponent)
+);
+
+const Accordion = dynamic(() =>
+  import("@/components/ui/accordion").then((mod) => mod.Accordion)
+);
+const AccordionContent = dynamic(() =>
+  import("@/components/ui/accordion").then((mod) => mod.AccordionContent)
+);
+const AccordionItem = dynamic(() =>
+  import("@/components/ui/accordion").then((mod) => mod.AccordionItem)
+);
+const AccordionTrigger = dynamic(() =>
+  import("@/components/ui/accordion").then((mod) => mod.AccordionTrigger)
+);
+const Badge = dynamic(() =>
+  import("@/components/ui/badge").then((mod) => mod.Badge)
+);
+const Skeleton = dynamic(() =>
+  import("@/components/ui/skeleton").then((mod) => mod.Skeleton)
+);
+
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
+  DropdownMenuShortcut,
 } from "@/components/ui/dropdown-menu";
-import TagDialog from "./components/tag-dialog";
-import CategoryDialog from "./components/category-dialog";
-import { Category } from "@prisma/client";
-import { getCategoriesApi } from "@/actions/interview/category/get-categories";
-import { getQuestionsByCategoryApi } from "@/actions/interview/question/get-questions";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Badge } from "@/components/ui/badge";
-import { MarkDownComponent } from "@/components/markdown";
-import { deleteQuestionByIdApi } from "@/actions/interview/question/delete-question-by-id";
 
 export type IInterviewQuestion = {
   category: string;
@@ -55,6 +80,8 @@ export default function InterviewPage() {
     },
   ];
   const [isAddQuestionDialogOpen, setIsAddQuestionDialogOpen] = useState(false);
+  const [isRemoveQuestionDialogOpen, setIsRemoveQuestionDialogOpen] =
+    useState(false);
   const [isTagDialogOpen, setIsTagDialogOpen] = useState(false);
   const [isCategoryDialogOpen, setIsCategoryDialogOpen] = useState(false);
   const [currentCategory, setCurrentCategory] = useState<string>("");
@@ -63,6 +90,8 @@ export default function InterviewPage() {
   const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(
     null
   );
+  const curUser = useCurrentUser();
+  const { toast } = useToast();
 
   const getCategories = useCallback(async () => {
     const res = await getCategoriesApi();
@@ -88,14 +117,6 @@ export default function InterviewPage() {
     }
   };
 
-  const deleteQuestion = async (id: number) => {
-    const res = await deleteQuestionByIdApi(id);
-    if (res.code === 0) {
-      const question = res.data as any;
-      setQuestions(questions.filter((q) => q.id !== question.id));
-    }
-  };
-
   useEffect(() => {
     getCategories();
   }, [getCategories]);
@@ -112,34 +133,49 @@ export default function InterviewPage() {
         isOpen={isCategoryDialogOpen}
         setIsOpen={setIsCategoryDialogOpen}
       />
-      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 flex flex-col justify-start items-center">
+      <RemoveQuestionDialog
+        isOpen={isRemoveQuestionDialogOpen}
+        setIsOpen={setIsRemoveQuestionDialogOpen}
+        currentQuestionId={currentQuestionId || 0}
+        updateQuestionInList={getQuestions}
+      />
+      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 flex flex-col justify-start items-center max-sm:hidden">
         <div className="w-full flex-1">
-          {categories.map((item, index) => (
-            <div
-              className="w-full cursor-pointer my-4"
-              onClick={() => changeCategory(item.name, item.id)}
-              key={item.name}
-            >
+          {categories.length ? (
+            categories.map((item, index) => (
               <div
-                className={`
+                className="w-full cursor-pointer my-4"
+                onClick={() => changeCategory(item.name, item.id)}
+                key={item.name}
+              >
+                <div
+                  className={`
                   px-4 mx-4 flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointe ${
                     currentCategory === item.name
                       ? "bg-[hsl(var(--primary))] hover:!bg-[hsl(var(--primary))] text-white"
                       : ""
                   }`}
-              >
-                <div className="mr-2">
-                  {menuData.find((m) => m.title === item.name)?.icon}
+                >
+                  <div className="mr-2">
+                    {menuData.find((m) => m.title === item.name)?.icon}
+                  </div>
+                  {item.name}
                 </div>
-                {item.name}
               </div>
+            ))
+          ) : (
+            <div className="space-y-4 px-4 mt-4">
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
             </div>
-          ))}
+          )}
         </div>
         <div className="mb-4 w-full px-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="w-full">
-              <Button variant="secondary">
+              <Button variant="secondary" disabled={curUser?.role === "USER"}>
                 <OperatorIcon className="mr-2" width={15} height={15} />
                 Operator
               </Button>
@@ -166,62 +202,119 @@ export default function InterviewPage() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="flex-1 h-full p-4 bg-[hsl(var(--background-nav))] rounded-lg overflow-auto">
-        <Accordion type="single" collapsible className="w-full">
-          {questions.map((question, index) => (
-            <AccordionItem key={index} value={`item-${index}`}>
-              <AccordionTrigger>
-                <div className="flex-1 flex justify-between items-center">
-                  <div className="flex-1 flex justify-start items-center">
-                    <Badge
-                      variant="default"
-                      className={`mr-2 ${
-                        question.difficulty === "EASY"
-                          ? "bg-green-500"
-                          : question.difficulty === "MEDIUM"
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
-                      }`}
-                    >
-                      {question.difficulty}
-                    </Badge>
-                    <span className="font-bold">{question.questionText}</span>
-                  </div>
-                  <div className="flex justify-center items-center">
-                    {question.tags?.map((tag: any, index: number) => (
-                      <Badge
-                        key={index}
-                        variant="secondary"
-                        className="mr-2 py-1"
-                      >
-                        {tag.tag.name}
-                      </Badge>
-                    ))}
-                    <Badge
-                      onClick={() => {
-                        setIsAddQuestionDialogOpen(true);
-                        setCurrentQuestionId(question.id);
-                      }}
-                      variant="default"
-                      className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
-                    >
-                      <EditIcon width={15} height={15} />
-                    </Badge>
-                    <Badge
-                      variant="destructive"
-                      onClick={() => deleteQuestion(question.id)}
-                      className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
-                    >
-                      <DeleteIcon width={15} height={15} />
-                    </Badge>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent className="max-h-[800px] overflow-auto bg-[hsl(var(--background-main))] p-2">
-                <MarkDownComponent text={question.answerContent} />
-              </AccordionContent>
-            </AccordionItem>
+      <div className="flex-1 h-full p-4 bg-[hsl(var(--background-nav))] w-0 rounded-lg overflow-auto">
+        <div className="w-full sm:hidden mb-4 overflow-auto flex flex-wrap">
+          {categories.map((item, index) => (
+            <span
+              key={index}
+              onClick={() => changeCategory(item.name, item.id)}
+              className={`flex justify-center items-center rounded-full  px-3 cursor-pointer border border-[hsl(var(--muted))] mr-2 mb-2 ${
+                item.name === currentCategory
+                  ? "bg-[hsl(var(--primary))] text-white"
+                  : "hover:bg-[hsl(var(--accent))] hover:text-white"
+              }`}
+            >
+              <div className="mr-2">
+                {menuData.find((m) => m.title === item.name)?.icon}
+              </div>
+              {item.name}
+            </span>
           ))}
+        </div>
+
+        <Accordion type="single" collapsible className="w-full">
+          {questions.length ? (
+            questions.map((question, index) => (
+              <AccordionItem key={index} value={`item-${index}`}>
+                <AccordionTrigger>
+                  <div className="flex-1 flex justify-between items-center">
+                    <div className="flex-1 flex justify-start items-center">
+                      <Badge
+                        variant="default"
+                        className={`mr-2 ${
+                          question.difficulty === "EASY"
+                            ? "bg-green-500"
+                            : question.difficulty === "MEDIUM"
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                        }`}
+                      >
+                        {question.difficulty}
+                      </Badge>
+                      <span className="font-bold text-base max-sm:text-sm truncate max-sm:w-[250px] text-left">
+                        {question.questionText}
+                      </span>
+                    </div>
+                    <div className="flex justify-center items-center max-sm:hidden">
+                      {question.tags?.map((tag: any, index: number) => (
+                        <Badge
+                          key={index}
+                          variant="secondary"
+                          className="mr-2 py-1"
+                        >
+                          {tag.tag.name}
+                        </Badge>
+                      ))}
+                      <Badge
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (curUser?.role === "USER") {
+                            toast({
+                              variant: "destructive",
+                              title: "Oops!",
+                              description: (
+                                <span>Only operator can edit the question</span>
+                              ),
+                            });
+                            return;
+                          }
+                          setIsAddQuestionDialogOpen(true);
+                          setCurrentQuestionId(question.id);
+                        }}
+                        variant="default"
+                        className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
+                      >
+                        <EditIcon width={15} height={15} />
+                      </Badge>
+                      <Badge
+                        variant="destructive"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (curUser?.role === "USER") {
+                            toast({
+                              variant: "destructive",
+                              title: "Oops!",
+                              description: (
+                                <span>
+                                  Only operator can delete the question
+                                </span>
+                              ),
+                            });
+                            return;
+                          }
+                          setCurrentQuestionId(question.id);
+                          setIsRemoveQuestionDialogOpen(true);
+                        }}
+                        className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
+                      >
+                        <DeleteIcon width={15} height={15} />
+                      </Badge>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="max-h-[800px] overflow-auto bg-[hsl(var(--background-main))] p-2 text-base leading-7 max-sm:text-sm">
+                  <MarkDownComponent text={question.answerContent} />
+                </AccordionContent>
+              </AccordionItem>
+            ))
+          ) : (
+            <div className="space-y-4 px-4 mt-4">
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+              <Skeleton className="h-12 w-full" />
+            </div>
+          )}
         </Accordion>
       </div>
     </div>

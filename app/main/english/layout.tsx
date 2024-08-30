@@ -30,7 +30,7 @@ export default function EnglishLayout({
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60">
+      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 max-sm:hidden">
         {menuData.map((item, index) => (
           <NavMenuItem key={index} item={item} isCollapsed={isCollapsed} />
         ))}
