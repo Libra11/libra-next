@@ -8,10 +8,19 @@
 import { Button } from "@/components/ui/button";
 import JavascriptIcon from "@/public/javascript.svg";
 import ReactIcon from "@/public/react.svg";
+import AlgorithmIcon from "@/public/algorithm.svg";
+import BrowserIcon from "@/public/chrome.svg";
+import ElectronIcon from "@/public/electron.svg";
+import CSS3Icon from "@/public/css3.svg";
+import GitIcon from "@/public/git.svg";
+import HTML5Icon from "@/public/html5.svg";
+import NodeIcon from "@/public/nodejs.svg";
+import DockerIcon from "@/public/docker.svg";
+import VueIcon from "@/public/vue.svg";
 import OperatorIcon from "@/public/operator.svg";
 import DeleteIcon from "@/public/delete.svg";
 import EditIcon from "@/public/edit.svg";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { Category } from "@prisma/client";
 import { getCategoriesApi } from "@/actions/interview/category/get-categories";
 import { getQuestionsByCategoryApi } from "@/actions/interview/question/get-questions";
@@ -78,6 +87,42 @@ export default function InterviewPage() {
       title: "React",
       icon: <ReactIcon width={20} height={20} />,
     },
+    {
+      title: "Algorithm",
+      icon: <AlgorithmIcon width={20} height={20} />,
+    },
+    {
+      title: "Browser",
+      icon: <BrowserIcon width={20} height={20} />,
+    },
+    {
+      title: "Electron",
+      icon: <ElectronIcon width={20} height={20} />,
+    },
+    {
+      title: "CSS",
+      icon: <CSS3Icon width={20} height={20} />,
+    },
+    {
+      title: "HTML",
+      icon: <HTML5Icon width={20} height={20} />,
+    },
+    {
+      title: "Node",
+      icon: <NodeIcon width={20} height={20} />,
+    },
+    {
+      title: "Docker",
+      icon: <DockerIcon width={20} height={20} />,
+    },
+    {
+      title: "Vue",
+      icon: <VueIcon width={20} height={20} />,
+    },
+    {
+      title: "Git",
+      icon: <GitIcon width={20} height={20} />,
+    },
   ];
   const [isAddQuestionDialogOpen, setIsAddQuestionDialogOpen] = useState(false);
   const [isRemoveQuestionDialogOpen, setIsRemoveQuestionDialogOpen] =
@@ -90,6 +135,7 @@ export default function InterviewPage() {
   const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(
     null
   );
+  const [isPending, startTransition] = useTransition();
   const curUser = useCurrentUser();
   const { toast } = useToast();
 
@@ -109,12 +155,17 @@ export default function InterviewPage() {
   };
 
   const getQuestions = async (id: number) => {
-    const res = await getQuestionsByCategoryApi(id);
-    if (res.code === 0) {
-      const questions = res.data as any;
-      setQuestions(questions);
-      setCurrentCategory(questions[0].category.name);
-    }
+    console.log('getQuestions', id);
+    startTransition(async () => {
+      const res = await getQuestionsByCategoryApi(id);
+      if (res.code === 0) {
+        const questions = res.data as any;
+        setQuestions(questions);
+        if (questions.length) {
+          setCurrentCategory(questions[0].category.name);
+        }
+      }
+    });
   };
 
   useEffect(() => {
@@ -223,7 +274,7 @@ export default function InterviewPage() {
         </div>
 
         <Accordion type="single" collapsible className="w-full">
-          {questions.length ? (
+          {!isPending ? (
             questions.map((question, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
                 <AccordionTrigger>

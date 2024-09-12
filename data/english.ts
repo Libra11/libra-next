@@ -4,8 +4,11 @@
  * @LastEditors: Libra
  * @Description:
  */
+import { ParagraphData } from "@/actions/english/paragraph/update-paragraph";
+import { ParagraphFormData } from "@/app/main/english/paragraph/components/add-paragraph-dialog";
 import { db } from "@/lib/db";
 import { Word } from "@/lib/puppeteer-crawler";
+import { Paragraph } from "@prisma/client";
 
 export const addWord = async (word: Word) => {
   try {
@@ -81,6 +84,72 @@ export const addWords = async (words: Word[]) => {
     return res;
   } catch (error) {
     console.log("error", error);
+    return null;
+  }
+};
+
+export const addParagraph = async (paragraph: ParagraphFormData) => {
+  try {
+    const res = await db.paragraph.create({
+      data: paragraph,
+    });
+    return res;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
+};
+
+export const deleteParagraph = async (id: number) => {
+  try {
+    await db.paragraph.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export const getParagraphs = async () => {
+  try {
+    const paragraphs = await db.paragraph.findMany();
+    return paragraphs;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const getParagraph = async (id: number) => {
+  try {
+    const paragraph = await db.paragraph.findUnique({
+      where: { id },
+    });
+    return paragraph;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const updateParagraph = async (data: ParagraphData) => {
+  console.log("Updating paragraph in database:", data);
+  try {
+    const updatedParagraph = await db.paragraph.update({
+      where: { id: data.id },
+      data: {
+        title: data.title,
+        description: data.description,
+        translation: data.translation,
+        note: data.note,
+        srt_lyrics: data.srt_lyrics,
+        audio_url: data.audio_url,
+        updated_at: new Date(),
+      },
+    });
+    console.log("Updated paragraph:", updatedParagraph);
+    return updatedParagraph;
+  } catch (error) {
+    console.error("更新段落时出错:", error);
     return null;
   }
 };

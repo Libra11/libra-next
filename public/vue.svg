@@ -8,6 +8,6 @@
 		</clipPath>
 	</defs>
 	<g clip-path="url(#clip77_12)">
-		<path id="path" d="M8 7.87L11.95 1.07L9.85 1.07L8 4.29L6.14 1.09L4.04 1.09L8 7.87ZM12.8 1.09L8 9.37L3.2 1.07L0 1.07L8 14.92L16 1.09L12.8 1.09Z" fill="#888888" fill-opacity="1.000000" fill-rule="nonzero"/>
+		<path id="path" d="M8 7.87L11.95 1.07L9.85 1.07L8 4.29L6.14 1.09L4.04 1.09L8 7.87ZM12.8 1.09L8 9.37L3.2 1.07L0 1.07L8 14.92L16 1.09L12.8 1.09Z" fill="currentColor" fill-opacity="1.000000" fill-rule="nonzero"/>
 	</g>
 </svg>

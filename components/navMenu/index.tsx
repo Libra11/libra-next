@@ -20,6 +20,7 @@ import { useState } from "react";
 import GeminiIcon from "@/public/gemini.svg";
 import EnglishIcon from "@/public/english.svg";
 import InterviewIcon from "@/public/interview.svg";
+import BlogIcon from "@/public/blog.svg";
 
 export const menuData = [
   {
@@ -41,6 +42,11 @@ export const menuData = [
     title: "Interview",
     icon: <InterviewIcon width={24} height={24} />,
     link: "/main/interview",
+  },
+  {
+    title: "Blog",
+    icon: <BlogIcon width={24} height={24} />,
+    link: "/main/blog",
   },
 ];
 

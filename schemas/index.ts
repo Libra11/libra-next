@@ -48,3 +48,12 @@ export const InterviewQuestionSchema = z.object({
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
   isActive: z.optional(z.boolean()),
 });
+
+export const ParagraphSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  description: z.string(),
+  audio_url: z.string(),
+  srt_lyrics: z.string(),
+  translation: z.string(),
+  note: z.string(),
+});

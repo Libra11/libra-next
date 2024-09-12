@@ -168,3 +168,16 @@ enum Difficulty {
   HARD
 }
 
+model Paragraph {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  audio_url   String
+  srt_lyrics  String
+  translation String
+  note        String?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@index([audio_url], name: "audio_url_idx")
+}

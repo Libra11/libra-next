@@ -84,7 +84,7 @@ const AddQuestionDialog = ({
     // tags as ts
     const ts = data.tags;
     // get tags id
-    const tagIds = ts.map((tag) =>
+    const tagIds = ts.map((tag: string) =>
       String(tags.find((t) => t.name === tag)?.id)
     );
     data.tags = tagIds;
@@ -113,6 +113,9 @@ const AddQuestionDialog = ({
       updateQuestionInList(Number(data.category));
       setSuccess("");
       setError("");
+      setTimeout(() => {
+        document.body.style.pointerEvents = "auto";
+      }, 1000);
     });
   };
 
@@ -147,6 +150,7 @@ const AddQuestionDialog = ({
   );
 
   useEffect(() => {
+    if (!isOpen) return;
     const loadQuestion = async (id: number) => {
       console.log("loadQuestion");
       await getTags();
@@ -157,7 +161,7 @@ const AddQuestionDialog = ({
     };
     loadQuestion(currentQuestionId);
     !currentQuestionId && form.reset();
-  }, [currentQuestionId, getQuestionById, form]);
+  }, [isOpen, currentQuestionId, getQuestionById, form]);
 
   return (
     <Dialog
@@ -167,8 +171,6 @@ const AddQuestionDialog = ({
         setError("");
         setSuccess("");
         if (!isOpen) {
-          // radix-ui dialog bug
-          // https://github.com/radix-ui/primitives/issues/1241
           setTimeout(() => {
             document.body.style.pointerEvents = "auto";
           }, 1000);
