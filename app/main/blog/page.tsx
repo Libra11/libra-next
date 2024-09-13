@@ -4,13 +4,29 @@
  * LastEditors: Libra
  * Description:
  */
+"use client";
+import { useState, useEffect } from "react";
+import Loading from "@/components/loading";
+
 const BlogPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="flex justify-center items-center w-full h-full rounded-lg overflow-hidden">
+    <div className="relative w-full h-full rounded-lg overflow-hidden">
+      {isLoading && <Loading size="large" />}
       <iframe
         className="w-full h-full"
         src="http://penlibra.com/blog/home"
         allowFullScreen
+        onLoad={() => setIsLoading(false)}
       ></iframe>
     </div>
   );

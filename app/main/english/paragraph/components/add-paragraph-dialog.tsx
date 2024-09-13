@@ -113,35 +113,37 @@ const AddParagraphDialog = ({
         }
       }}
     >
-      <DialogContent>
+      <DialogContent className="max-sm:w-11/12 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Add Paragraph</DialogTitle>
-          <DialogDescription></DialogDescription>
         </DialogHeader>
-        <div>
-          <div className="flex justify-start items-center">
+        <div className="space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row justify-start items-center gap-2">
             <Input
               id="paragraph"
               type="file"
               accept="audio/*"
               onChange={(e) => {
                 const files = e.target.files;
-                console.log(e.target.files);
                 if (files) {
                   setAudioFile(files[0]);
                 }
               }}
+              className="w-full sm:w-auto"
             />
             <Button
               variant="default"
               onClick={uploadAudio}
-              className="h-10 rounded-lg w-24 p-0 mr-1"
+              className="w-full sm:w-auto"
             >
               Upload
             </Button>
           </div>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-4 sm:space-y-6"
+            >
               <div className="space-y-4">
                 <FormField
                   control={form.control}

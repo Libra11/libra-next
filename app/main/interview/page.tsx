@@ -77,6 +77,14 @@ export type IInterviewQuestion = {
   difficulty: "EASY" | "MEDIUM" | "HARD";
   isActive?: boolean;
 };
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 export default function InterviewPage() {
   const menuData = [
     {
@@ -155,7 +163,7 @@ export default function InterviewPage() {
   };
 
   const getQuestions = async (id: number) => {
-    console.log('getQuestions', id);
+    console.log("getQuestions", id);
     startTransition(async () => {
       const res = await getQuestionsByCategoryApi(id);
       if (res.code === 0) {
@@ -254,23 +262,34 @@ export default function InterviewPage() {
         </div>
       </div>
       <div className="flex-1 h-full p-4 bg-[hsl(var(--background-nav))] w-0 rounded-lg overflow-auto">
-        <div className="w-full sm:hidden mb-4 overflow-auto flex flex-wrap">
-          {categories.map((item, index) => (
-            <span
-              key={index}
-              onClick={() => changeCategory(item.name, item.id)}
-              className={`flex justify-center items-center rounded-full  px-3 cursor-pointer border border-[hsl(var(--muted))] mr-2 mb-2 ${
-                item.name === currentCategory
-                  ? "bg-[hsl(var(--primary))] text-white"
-                  : "hover:bg-[hsl(var(--accent))] hover:text-white"
-              }`}
-            >
-              <div className="mr-2">
-                {menuData.find((m) => m.title === item.name)?.icon}
-              </div>
-              {item.name}
-            </span>
-          ))}
+        <div className="w-full sm:hidden mb-4">
+          <Select
+            defaultValue={categories[0]?.id.toString()}
+            onValueChange={(value) => {
+              const category = categories.find(
+                (c) => c.id.toString() === value
+              );
+              if (category) {
+                changeCategory(category.name, category.id);
+              }
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((item) => (
+                <SelectItem key={item.id} value={item.id.toString()}>
+                  <div className="flex items-center">
+                    <div className="mr-2">
+                      {menuData.find((m) => m.title === item.name)?.icon}
+                    </div>
+                    {item.name}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <Accordion type="single" collapsible className="w-full">

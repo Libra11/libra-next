@@ -10,6 +10,9 @@ import WordIcon from "@/public/word.svg";
 import PhraseIcon from "@/public/phrase.svg";
 import ParagraphIcon from "@/public/paragraph.svg";
 import { useState } from "react";
+import { ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export default function EnglishLayout({
   children,
@@ -34,13 +37,48 @@ export default function EnglishLayout({
     },
   ];
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 max-sm:hidden">
+    <div className="w-full h-full flex">
+      {/* 移动端侧边栏触发器 */}
+      <div className="lg:hidden">
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="fixed -left-2 top-1/2 -translate-y-1/2 bg-[hsl(var(--primary))] text-white"
+            >
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[240px] sm:w-[300px] p-0">
+            <div className="flex items-center justify-center pt-4">
+              <h2 className="text-xl font-bold">English Learning</h2>
+            </div>
+            <nav className="flex flex-col">
+              {menuData.map((item, index) => (
+                <NavMenuItem
+                  key={index}
+                  item={item}
+                  isCollapsed={false}
+                  onClick={() => setIsOpen(false)}
+                />
+              ))}
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </div>
+
+      {/* 桌面端侧边菜单 */}
+      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 max-lg:hidden">
         {menuData.map((item, index) => (
           <NavMenuItem key={index} item={item} isCollapsed={isCollapsed} />
         ))}
       </div>
+
+      {/* 主内容区域 */}
       <div className="flex-1 h-full p-4 bg-[hsl(var(--background-nav))] rounded-lg">
         {children}
       </div>

@@ -15,34 +15,40 @@ const WordDisplay = ({
   playAudio: any;
 }) => {
   return (
-    <div className=" w-[800px] flex flex-col justify-center items-start max-sm:w-full">
-      <div className="mt-20 mb-8 font-bold text-3xl max-sm:mt-10">
+    <div className="w-full max-w-[800px] mx-auto py-8">
+      <h1 className="text-4xl sm:text-5xl font-bold mb-6 text-gray-800 dark:text-gray-100">
         {wordData?.textContent}
-      </div>
-      <div className="flex justify-start items-center text-sm">
+      </h1>
+      <div className="flex flex-wrap gap-3 mb-8">
         {wordData?.phoneticsArray.map((phonetic, idx) => (
           <div
             key={idx}
-            className="bg-[hsl(var(--primary))] mr-2 rounded-full px-4 py-2 text-white flex justify-center items-center"
+            className="bg-[hsl(var(--primary))] rounded-full px-4 py-2 text-white flex items-center space-x-2 text-sm sm:text-base"
           >
-            <span>{phonetic.name}</span>
-            <span className=" text-slate-50 mx-2">{phonetic.value}</span>
-            <div className=" cursor-pointer hover:text-slate-200">
-              <VoiceIcon
-                width={16}
-                height={16}
-                onClick={() => playAudio(phonetic.phonetic, idx)}
-              />
-            </div>
+            <span className="font-semibold">{phonetic.name}</span>
+            <span>{phonetic.value}</span>
+            <button
+              onClick={() => playAudio(phonetic.phonetic, idx)}
+              className="hover:text-indigo-200 transition-colors"
+            >
+              <VoiceIcon width={16} height={16} />
+            </button>
             <audio id={`audioPlayer_${idx}`} src="" className="hidden"></audio>
           </div>
         ))}
       </div>
-      <div className=" mt-4">
+      <div className="space-y-4">
         {wordData?.translationsArray.map((translation, idx) => (
-          <div key={idx} className="py-2">
-            <span className="font-bold mr-2">{translation.pos}</span>
-            <span>{translation.trans}</span>
+          <div
+            key={idx}
+            className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4"
+          >
+            <span className="font-bold text-[hsl(var(--primary))] mr-2">
+              {translation.pos}
+            </span>
+            <span className="text-gray-700 dark:text-gray-300">
+              {translation.trans}
+            </span>
           </div>
         ))}
       </div>

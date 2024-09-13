@@ -38,7 +38,12 @@ export const addWord = async (word: Word) => {
 export const getWord = async (textContent: string) => {
   try {
     const word = await db.word.findFirst({
-      where: { textContent },
+      where: {
+        textContent: {
+          equals: textContent,
+          mode: "insensitive", // 这里添加不区分大小写的查询
+        },
+      },
       include: {
         phoneticsArray: true,
         translationsArray: true,
@@ -47,6 +52,7 @@ export const getWord = async (textContent: string) => {
     if (!word) return null;
     return word;
   } catch (error) {
+    console.error("Error fetching word:", error);
     return null;
   }
 };

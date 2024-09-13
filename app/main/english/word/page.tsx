@@ -15,16 +15,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-// import AddWordDialog from "@/app/main/english/word/components/add-word-dialog";
-// import UploadAudioDialog from "@/app/main/english/word/components/upload-audio-dialog";
-// import WordDisplay from "@/app/main/english/word/components/word-display";
 import useAudioCache from "@/hooks/useAudioCache";
 import { Word } from "@/lib/puppeteer-crawler";
 import SearchIcon from "@/public/search.svg";
 import WarnIcon from "@/public/warning.svg";
 import Image from "next/image";
 import { PlusCircledIcon } from "@radix-ui/react-icons";
-// import ImportWordDialog from "./components/import-word-dialog";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 import dynamic from "next/dynamic";
@@ -34,7 +30,6 @@ const UploadAudioDialog = dynamic(
   () => import("./components/upload-audio-dialog")
 );
 const WordDisplay = dynamic(() => import("./components/word-display"));
-
 const ImportWordDialog = dynamic(
   () => import("./components/import-word-dialog")
 );
@@ -53,7 +48,10 @@ export default function WordPage() {
   const [isFirst, setIsFirst] = useState(true);
 
   const getWord = async (word: string) => {
-    const res = await getWordApi(word);
+    const trimmedWord = word.trim();
+    if (!trimmedWord) return;
+
+    const res = await getWordApi(trimmedWord.toLowerCase());
     setIsFirst(false);
     if (res.code === 0) {
       setWordData(res.data as Word);
@@ -63,7 +61,7 @@ export default function WordPage() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-start items-center">
+    <div className="w-full h-full flex flex-col justify-start items-center px-4 sm:px-6 lg:px-8">
       <AddWordDialog
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
@@ -83,12 +81,12 @@ export default function WordPage() {
         setFile={setImportFile}
       />
 
-      <div className=" self-end">
+      <div className="self-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="default"
-              className=" rounded-full"
+              className="rounded-full"
               disabled={curUser?.role === "USER"}
             >
               <PlusCircledIcon width={16} height={16} className="mr-2" />
@@ -118,28 +116,45 @@ export default function WordPage() {
           priority
         />
       </div>
-      <div className="w-[800px] rounded-lg min-h-12 border border-[hsl(var(--primary))]  flex justify-center items-center my-2 max-sm:w-full">
-        <Input
-          placeholder="type the word you want to search"
-          value={word}
-          onChange={(e) => setWord(e.target.value)}
-          className="flex-1 p-0 pl-4 min-h-10 py-1 border-none shadow-none outline-none focus-visible:ring-0"
-        />
-        <Button
-          variant="default"
-          onClick={() => getWord(word)}
-          className="h-10 rounded-lg w-24 p-0 mr-1"
-        >
-          <SearchIcon className="mr-2" width={18} height={18} /> Search
-        </Button>
+      <div className="w-full max-w-[800px] mx-auto mt-8">
+        <div className="relative">
+          <Input
+            placeholder="Type the word you want to search"
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                getWord(word);
+              }
+            }}
+            className="w-full pl-4 pr-12 py-2 rounded-lg focus:border-transparent h-11 border-[hsl(var(--primary))]"
+          />
+          <Button
+            variant="default"
+            onClick={() => getWord(word)}
+            className="absolute right-1 top-1 bottom-1 rounded-lg px-4"
+          >
+            <SearchIcon className="mr-2" width={18} height={18} /> Search
+          </Button>
+        </div>
       </div>
 
       {wordData ? (
         <WordDisplay wordData={wordData} playAudio={playAudio} />
       ) : !isFirst ? (
-        <div className="mt-20 text-white w-[800px] bg-[hsl(var(--primary))] rounded-lg px-4 py-2 flex justify-start items-center">
-          <WarnIcon className="mr-2 text-red-500" width={32} height={32} />
-          <div className="flex-1">No word data found</div>
+        <div className="w-full max-w-[800px] mx-auto mt-8 p-4 sm:p-6 bg-red-100 dark:bg-red-900 rounded-lg shadow-md">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4">
+            <WarnIcon className="text-red-500 w-12 h-12 sm:w-16 sm:h-16 flex-shrink-0" />
+            <div>
+              <p className="text-xl text-center sm:text-left sm:text-2xl font-bold text-red-700 dark:text-red-300 mb-2">
+                Word Not Found
+              </p>
+              <p className="text-gray-700 dark:text-gray-300 text-sm sm:text-base text-center sm:text-left">
+                Sorry, we couldn&apos;t find any data for the word &quot;{word}
+                &quot;. Please check your spelling or try another word.
+              </p>
+            </div>
+          </div>
         </div>
       ) : null}
     </div>

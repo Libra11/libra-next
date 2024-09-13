@@ -5,9 +5,11 @@
  * Description:
  */
 "use client";
+import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import useGeminiChat from "@/hooks/useGeminiChat";
 import LibraIcon from "@/public/Libra.svg";
+import { ChevronRight } from "lucide-react";
 
 import dynamic from "next/dynamic";
 
@@ -67,26 +69,34 @@ export default function GeminiPage() {
         />
       </div>
       <div className="bg-[hsl(var(--background-nav))] flex-1 w-0 rounded-lg ml-2  h-full flex flex-col justify-center items-center relative">
-        <Sheet>
-          <SheetTrigger>
-            <div className="absolute top-1/2 -mt-12 left-0 w-0 h-0 border-y-[18px] border-y-transparent border-l-[12px] border-l-[hsl(var(--primary))] sm:hidden"></div>
-          </SheetTrigger>
-          <SheetContent>
-            <SheetHeader>
-              <SheetTitle></SheetTitle>
-              <SheetDescription className="flex justify-center items-center !mb-4">
-                <LibraIcon className="w-16 h-16" />
-              </SheetDescription>
-            </SheetHeader>
-            <SessionList
-              sessions={sessions}
-              currentSession={currentSession}
-              addNewSession={addNewSession}
-              getCurrentSessionMessages={getCurrentSessionMessages}
-              deleteCurrentSession={deleteCurrentSession}
-            />
-          </SheetContent>
-        </Sheet>
+        <div className="sm:hidden">
+          <Sheet>
+            <SheetTrigger>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="fixed -left-2 top-1/2 -translate-y-1/2 bg-[hsl(var(--primary))] text-white"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <SheetHeader>
+                <SheetTitle></SheetTitle>
+                <SheetDescription className="flex justify-center items-center !mb-4">
+                  <LibraIcon className="w-16 h-16" />
+                </SheetDescription>
+              </SheetHeader>
+              <SessionList
+                sessions={sessions}
+                currentSession={currentSession}
+                addNewSession={addNewSession}
+                getCurrentSessionMessages={getCurrentSessionMessages}
+                deleteCurrentSession={deleteCurrentSession}
+              />
+            </SheetContent>
+          </Sheet>
+        </div>
 
         <ChatHistory history={history} userImage={image || undefined} />
         <MessageInput onSendMessage={run} isPending={isPending} />

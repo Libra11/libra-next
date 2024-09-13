@@ -59,40 +59,44 @@ export default function ParagraphDetailPage() {
   }, [id, getParagraph]);
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-8 rounded-lg shadow-md">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-4xl font-bold tracking-tight">{title}</h1>
+    <div className="flex flex-col h-full">
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 sm:p-8 rounded-lg shadow-md">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2 sm:mb-0">
+            {title}
+          </h1>
           <Button
             onClick={() => setIsEditDialogOpen(true)}
-            className="bg-white text-indigo-600 hover:bg-indigo-100"
+            className="bg-white text-indigo-600 hover:bg-indigo-100 mt-2 sm:mt-0"
           >
             Edit
           </Button>
         </div>
-        <p className="text-lg text-indigo-100 mt-2 max-w-3xl">{description}</p>
+        <p className="text-base sm:text-lg text-indigo-100 mt-2">
+          {description}
+        </p>
       </div>
-      <div className="flex-grow flex flex-col lg:flex-row gap-6 mt-6 overflow-hidden">
-        <div className="lg:w-[500px] flex flex-col gap-6 flex-shrink-0">
+      <div className="flex-grow flex flex-col lg:flex-row gap-4 sm:gap-6 mt-6 overflow-auto">
+        <div className="w-full lg:w-[500px] flex flex-col gap-4 sm:gap-6">
           <div className="bg-card text-card-foreground rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
             <AudioPlayerWithLyrics audioSrc={audioSrc} srtData={srt} />
           </div>
 
-          <div className="bg-card text-card-foreground rounded-lg shadow-lg p-6 flex-grow overflow-auto border border-gray-200 dark:border-gray-700">
-            <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">
+          <div className="flex-grow bg-card text-card-foreground rounded-lg shadow-lg p-4 sm:p-6 overflow-auto border border-gray-200 dark:border-gray-700">
+            <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-indigo-600 dark:text-indigo-400">
               Translation
             </h2>
-            <div className="prose dark:prose-invert max-w-none">
+            <div className="prose dark:prose-invert max-w-none text-sm sm:text-base">
               {translation}
             </div>
           </div>
         </div>
 
-        <div className="flex-grow bg-card text-card-foreground rounded-lg shadow-lg p-6 overflow-auto border border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold mb-4 text-indigo-600 dark:text-indigo-400">
+        <div className="flex-grow bg-card text-card-foreground rounded-lg shadow-lg p-4 sm:p-6 overflow-auto border border-gray-200 dark:border-gray-700 min-h-[300px] lg:min-h-0">
+          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-indigo-600 dark:text-indigo-400">
             Note
           </h2>
-          <div className="prose dark:prose-invert max-w-none">
+          <div className="prose dark:prose-invert max-w-none text-sm sm:text-base">
             <MarkDownComponent text={note} />
           </div>
         </div>

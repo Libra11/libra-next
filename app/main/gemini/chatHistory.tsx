@@ -6,9 +6,10 @@
  */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MarkDownComponent } from "@/components/markdown";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Content } from "@google/generative-ai";
 import GeminiIcon from "@/public/gemini.svg";
+import Loading from "@/components/loading";
 
 interface ChatHistoryProps {
   history: Content[];
@@ -16,6 +17,8 @@ interface ChatHistoryProps {
 }
 
 export function ChatHistory({ history, userImage }: ChatHistoryProps) {
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     const chatContainer = document.querySelector(".chat");
     if (chatContainer) {
@@ -24,7 +27,18 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
         behavior: "smooth",
       });
     }
+
+    // 设置一个最小加载时间
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
   }, [history]);
+
+  if (isLoading) {
+    return <Loading size="large" />;
+  }
 
   return (
     <div className="chat flex-1 w-full h-0 overflow-auto p-4">
@@ -36,7 +50,7 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
           key={index}
         >
           {item.role === "user" ? (
-            <Avatar className=" mr-2 w-12 h-12 mt-6 max-sm:hidden">
+            <Avatar className="mr-2 w-12 h-12 mt-6 max-sm:hidden">
               <AvatarImage src={userImage || undefined} />
               <AvatarFallback className="bg-[hsl(var(--background-main))] text-xl">
                 L
@@ -45,7 +59,6 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
           ) : null}
 
           <div
-            key={index}
             className={`${
               item.role === "user"
                 ? "bg-[hsl(var(--secondary))]"
