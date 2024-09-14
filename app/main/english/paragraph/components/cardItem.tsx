@@ -7,7 +7,7 @@
 "use client";
 import { Paragraph } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, Headphones } from "lucide-react";
 
 const CardItem = ({ paragraph }: { paragraph: Paragraph }) => {
   const router = useRouter();
@@ -38,9 +38,12 @@ const CardItem = ({ paragraph }: { paragraph: Paragraph }) => {
       </div>
       <div className="absolute -top-10 -left-10 w-20 h-20 bg-indigo-100 dark:bg-indigo-900 rounded-full opacity-70 group-hover:scale-150 transition-transform duration-500"></div>
       <div className="relative">
-        <h2 className="font-bold text-xl mb-3 text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
-          {paragraph.title}
-        </h2>
+        <div className="flex flex-col items-start mb-3">
+          <Headphones className="w-10 h-10 mb-2 text-indigo-600 dark:text-indigo-400" />
+          <h2 className="font-bold text-xl text-gray-800 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors duration-300">
+            {paragraph.title}
+          </h2>
+        </div>
         <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 text-sm">
           {paragraph.description}
         </p>

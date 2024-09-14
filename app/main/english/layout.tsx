@@ -13,7 +13,8 @@ import { useState } from "react";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
+import QuestionIcon from "@/public/question.svg";
+import SentenceIcon from "@/public/sentence.svg";
 export default function EnglishLayout({
   children,
 }: Readonly<{
@@ -34,6 +35,16 @@ export default function EnglishLayout({
       title: "Paragraph",
       icon: <ParagraphIcon width={20} height={20} />,
       link: "/main/english/paragraph",
+    },
+    {
+      title: "Questions",
+      icon: <QuestionIcon width={20} height={20} />, // 需要导入或创建 QuestionIcon
+      link: "/main/english/questions",
+    },
+    {
+      title: "Sentence",
+      icon: <SentenceIcon width={20} height={20} />,
+      link: "/main/english/sentences",
     },
   ];
   const [isCollapsed, setIsCollapsed] = useState(false);

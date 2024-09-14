@@ -181,3 +181,29 @@ model Paragraph {
 
   @@index([audio_url], name: "audio_url_idx")
 }
+
+model EnglishQuestion {
+  id          Int      @id @default(autoincrement())
+  question    String
+  options     String[]
+  answer      String
+  explanation String
+  type        QuestionType
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum QuestionType {
+  SINGLE_CHOICE
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  FILL_IN_THE_BLANK
+}
+
+model Sentence {
+  id          Int      @id @default(autoincrement())
+  title       String
+  explanation String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

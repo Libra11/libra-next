@@ -9,6 +9,9 @@ import { ParagraphFormData } from "@/app/main/english/paragraph/components/add-p
 import { db } from "@/lib/db";
 import { Word } from "@/lib/puppeteer-crawler";
 import { Paragraph } from "@prisma/client";
+import { EnglishQuestion, QuestionType } from "@prisma/client";
+import { QuestionFormData } from "@/types/question";
+import { Sentence, Difficulty } from "@prisma/client";
 
 export const addWord = async (word: Word) => {
   try {
@@ -157,5 +160,143 @@ export const updateParagraph = async (data: ParagraphData) => {
   } catch (error) {
     console.error("更新段落时出错:", error);
     return null;
+  }
+};
+
+export const addEnglishQuestion = async (data: QuestionFormData) => {
+  try {
+    const question = await db.englishQuestion.create({
+      data,
+    });
+    return question;
+  } catch (error) {
+    console.error("Error adding question:", error);
+    return null;
+  }
+};
+
+export const getEnglishQuestions = async () => {
+  try {
+    const questions = await db.englishQuestion.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return questions;
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    return null;
+  }
+};
+
+export const getEnglishQuestion = async (id: number) => {
+  try {
+    const question = await db.englishQuestion.findUnique({
+      where: { id },
+    });
+    return question;
+  } catch (error) {
+    console.error("Error fetching question:", error);
+    return null;
+  }
+};
+
+export const updateEnglishQuestion = async (
+  id: number,
+  data: Partial<QuestionFormData>
+) => {
+  try {
+    const updatedQuestion = await db.englishQuestion.update({
+      where: { id },
+      data,
+    });
+    return updatedQuestion;
+  } catch (error) {
+    console.error("Error updating question:", error);
+    return null;
+  }
+};
+
+export const deleteEnglishQuestion = async (id: number) => {
+  try {
+    await db.englishQuestion.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    console.error("Error deleting question:", error);
+    return false;
+  }
+};
+
+export const addSentence = async (
+  data: Omit<Sentence, "id" | "createdAt" | "updatedAt">
+) => {
+  try {
+    const sentence = await db.sentence.create({
+      data,
+    });
+    return sentence;
+  } catch (error) {
+    console.error("Error adding sentence:", error);
+    return null;
+  }
+};
+
+// getSentences 和 getSentence 函数不需要修改
+
+export const updateSentence = async (
+  id: number,
+  data: Partial<Omit<Sentence, "id" | "createdAt" | "updatedAt">>
+) => {
+  try {
+    const updatedSentence = await db.sentence.update({
+      where: { id },
+      data,
+    });
+    return updatedSentence;
+  } catch (error) {
+    console.error("Error updating sentence:", error);
+    return null;
+  }
+};
+
+// deleteSentence 函数不需要修改
+
+export const getSentences = async () => {
+  try {
+    const sentences = await db.sentence.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return sentences;
+  } catch (error) {
+    console.error("Error fetching sentences:", error);
+    return null;
+  }
+};
+
+export const getSentence = async (id: number) => {
+  try {
+    const sentence = await db.sentence.findUnique({
+      where: { id },
+    });
+    return sentence;
+  } catch (error) {
+    console.error("Error fetching sentence:", error);
+    return null;
+  }
+};
+
+export const deleteSentence = async (id: number) => {
+  try {
+    await db.sentence.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    console.error("Error deleting sentence:", error);
+    return false;
   }
 };

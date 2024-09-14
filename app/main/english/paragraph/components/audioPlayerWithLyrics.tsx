@@ -106,7 +106,7 @@ const AudioPlayerWithLyrics = ({
   };
 
   return (
-    <div className="bg-white rounded-lg p-6">
+    <div className="bg-card rounded-lg p-6">
       <audio ref={audioRef} src={audioSrc} />
       <div className="flex flex-col space-y-4">
         <div className="flex items-center justify-center space-x-4">
