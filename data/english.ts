@@ -60,6 +60,16 @@ export const getWord = async (textContent: string) => {
   }
 };
 
+export const getWords = async () => {
+  try {
+    const words = await db.word.findMany();
+    return words;
+  } catch (error) {
+    console.error("Error fetching words:", error);
+    return null;
+  }
+};
+
 export const addWords = async (words: Word[]) => {
   try {
     const res = await Promise.all(

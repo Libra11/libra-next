@@ -144,11 +144,11 @@ export default function QuestionsPage() {
                   >
                     {questionTypeMap[question.type]}
                   </Badge>
-                  <span className="font-bold text-base max-sm:text-sm truncate max-sm:w-[250px] text-left">
+                  <span className="font-bold text-base max-sm:text-sm text-left break-words">
                     {question.question}
                   </span>
                 </div>
-                <div className="flex justify-center items-center space-x-2 max-sm:hidden">
+                <div className="flex-shrink-0 flex justify-center items-center space-x-2 max-sm:hidden">
                   <span
                     className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors"
                     onClick={(e) => {

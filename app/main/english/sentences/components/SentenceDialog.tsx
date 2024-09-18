@@ -38,6 +38,7 @@ export default function SentenceDialog({
     Omit<Sentence, "id" | "createdAt" | "updatedAt">
   >({
     title: "",
+    translation: "",
     explanation: "",
   });
 
@@ -45,11 +46,13 @@ export default function SentenceDialog({
     if (sentenceToEdit) {
       setFormData({
         title: sentenceToEdit.title,
+        translation: sentenceToEdit.translation,
         explanation: sentenceToEdit.explanation,
       });
     } else {
       setFormData({
         title: "",
+        translation: "",
         explanation: "",
       });
     }
@@ -85,6 +88,16 @@ export default function SentenceDialog({
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
+              }
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="translation">Translation</Label>
+            <Input
+              id="translation"
+              value={formData.translation}
+              onChange={(e) =>
+                setFormData({ ...formData, translation: e.target.value })
               }
             />
           </div>

@@ -203,6 +203,7 @@ enum QuestionType {
 model Sentence {
   id          Int      @id @default(autoincrement())
   title       String
+  translation String
   explanation String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

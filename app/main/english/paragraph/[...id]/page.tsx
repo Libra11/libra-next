@@ -59,24 +59,8 @@ export default function ParagraphDetailPage() {
   }, [id, getParagraph]);
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 sm:p-8 rounded-lg shadow-md">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2 sm:mb-0">
-            {title}
-          </h1>
-          <Button
-            onClick={() => setIsEditDialogOpen(true)}
-            className="bg-white text-indigo-600 hover:bg-indigo-100 mt-2 sm:mt-0"
-          >
-            Edit
-          </Button>
-        </div>
-        <p className="text-base sm:text-lg text-indigo-100 mt-2">
-          {description}
-        </p>
-      </div>
-      <div className="flex-grow flex flex-col lg:flex-row gap-4 sm:gap-6 mt-6 overflow-auto">
+    <div className="flex flex-col h-full w-full">
+      <div className="flex-grow flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 overflow-auto">
         <div className="w-full lg:w-[500px] flex flex-col gap-4 sm:gap-6">
           <div className="bg-card text-card-foreground rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
             <AudioPlayerWithLyrics audioSrc={audioSrc} srtData={srt} />
@@ -100,6 +84,22 @@ export default function ParagraphDetailPage() {
             <MarkDownComponent text={note} />
           </div>
         </div>
+      </div>
+      <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-4 sm:p-8 rounded-lg shadow-md w-full sm:w-auto">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+          <h1 className="text-2xl sm:text-4xl font-bold tracking-tight mb-2 sm:mb-0 truncate sm:whitespace-normal w-full sm:w-auto">
+            {title}
+          </h1>
+          <Button
+            onClick={() => setIsEditDialogOpen(true)}
+            className="bg-white text-indigo-600 hover:bg-indigo-100 mt-2 sm:mt-0"
+          >
+            Edit
+          </Button>
+        </div>
+        <p className="text-base sm:text-lg text-indigo-100 mt-2 truncate sm:whitespace-normal w-full sm:w-auto">
+          {description}
+        </p>
       </div>
       <EditParagraphDialog
         isOpen={isEditDialogOpen}

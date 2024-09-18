@@ -151,6 +151,7 @@ export default function InterviewPage() {
     const res = await getCategoriesApi();
     if (res.code === 0) {
       const categories = res.data as Category[];
+      if (!categories.length) return;
       setCategories(categories);
       setCurrentCategory(categories[0].name);
       getQuestions(categories[0].id);

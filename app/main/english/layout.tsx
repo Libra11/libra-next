@@ -90,7 +90,7 @@ export default function EnglishLayout({
       </div>
 
       {/* 主内容区域 */}
-      <div className="flex-1 h-full p-4 bg-[hsl(var(--background-nav))] rounded-lg">
+      <div className="flex-1 w-0 h-full p-4 bg-[hsl(var(--background-nav))] rounded-lg">
         {children}
       </div>
     </div>
