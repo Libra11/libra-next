@@ -42,7 +42,7 @@ export default function ParagraphPage() {
       setHasMore(res.data.total > res.data.page * res.data.pageSize);
     }
     setIsLoading(false);
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     getParagraphs();

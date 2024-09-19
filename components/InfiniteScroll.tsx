@@ -4,7 +4,7 @@
  * LastEditors: Libra
  * Description:
  */
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 interface InfiniteScrollProps<T> {
   items: T[];
@@ -26,7 +26,7 @@ export function InfiniteScroll<T>({
   const containerRef = useRef<HTMLDivElement>(null);
   const [isFetching, setIsFetching] = useState(false);
 
-  const handleScroll = async () => {
+  const handleScroll = useCallback(async () => {
     if (isFetching || !hasMore || isLoading || !containerRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
@@ -37,7 +37,7 @@ export function InfiniteScroll<T>({
       await loadMore(); // 加载更多数据
       setIsFetching(false);
     }
-  };
+  }, [isFetching, hasMore, isLoading, loadMore]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -49,7 +49,7 @@ export function InfiniteScroll<T>({
     return () => {
       container.removeEventListener("scroll", handleScroll);
     };
-  }, [hasMore, isLoading, isFetching]);
+  }, [handleScroll]);
 
   return (
     <div

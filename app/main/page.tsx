@@ -162,7 +162,7 @@ export default function DashboardPage() {
     };
 
     fetchData();
-  }, []);
+  }, [totalQuestions, totalSentences, totalParagraphs, totalWords]);
 
   if (isLoading) {
     return <Loading size="large" />;
@@ -193,14 +193,15 @@ export default function DashboardPage() {
 
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6 h-full bg-[hsl(var(--background-nav))] rounded-lg overflow-auto">
-      <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+          Dashboard
+        </h2>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
           <CalendarDateRangePicker />
-          <Button>Download</Button>
         </div>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
@@ -252,8 +253,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+        <Card className="col-span-1 lg:col-span-4">
           <CardHeader>
             <CardTitle>Learning Progress</CardTitle>
           </CardHeader>
@@ -274,7 +275,7 @@ export default function DashboardPage() {
             </ChartContainer>
           </CardContent>
         </Card>
-        <Card className="col-span-3">
+        <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
             <CardTitle>Interview Categories</CardTitle>
           </CardHeader>
@@ -297,8 +298,8 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-        <Card className="col-span-4">
+      <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+        <Card className="col-span-1 lg:col-span-4">
           <CardHeader>
             <CardTitle>Recent Activity</CardTitle>
           </CardHeader>
@@ -320,7 +321,7 @@ export default function DashboardPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="col-span-3">
+        <Card className="col-span-1 lg:col-span-3">
           <CardHeader>
             <CardTitle>Learning Streak</CardTitle>
           </CardHeader>

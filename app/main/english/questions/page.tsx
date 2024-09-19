@@ -85,11 +85,6 @@ export default function QuestionsPage() {
     setIsDialogOpen(true);
   };
 
-  const handleEditQuestion = (question: EnglishQuestion) => {
-    setEditingQuestion(question);
-    setIsDialogOpen(true);
-  };
-
   const handleQuestionSubmitted = (newQuestion: EnglishQuestion) => {
     setQuestions((prevQuestions) => {
       const index = prevQuestions.findIndex((q) => q.id === newQuestion.id);
@@ -122,75 +117,82 @@ export default function QuestionsPage() {
       setHasMore(res.data.total > res.data.page * res.data.pageSize);
     }
     setIsLoading(false);
-  }, [hasMore, isLoading, page, questions.length]);
+  }, [hasMore, isLoading, page]);
 
   const renderQuestion = useCallback(
-    (question: EnglishQuestion, index: number) => (
-      <AccordionItem
-        key={question.id}
-        value={`item-${index}`}
-        className="w-full"
-      >
-        <AccordionTrigger>
-          <div className="flex-1 flex justify-between items-center">
-            <div className="flex-1 flex justify-start items-center">
-              <Badge
-                variant="default"
-                className="mr-2 bg-[hsl(var(--primary))]"
-              >
-                {questionTypeMap[question.type]}
-              </Badge>
-              <span className="font-bold text-base max-sm:text-sm text-left break-words">
-                {question.question}
-              </span>
-            </div>
-            <div className="flex-shrink-0 flex justify-center items-center space-x-2 max-sm:hidden">
-              <span
-                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleEditQuestion(question);
-                }}
-              >
-                <Edit className="h-5 w-5 text-[hsl(var(--primary))]" />
-              </span>
-              <span
-                className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors !mr-4"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setRemovingQuestionId(question.id);
-                }}
-              >
-                <Trash2 className="h-5 w-5 text-red-500" />
-              </span>
-            </div>
-          </div>
-        </AccordionTrigger>
-        <AccordionContent className="bg-[hsl(var(--background-main))] p-2 text-base leading-7 max-sm:text-sm">
-          <div className="space-y-2">
-            <div className="font-semibold">Options:</div>
-            {question.options.map((option, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "p-2 rounded",
-                  question.answer === option
-                    ? "bg-[hsl(var(--primary))] text-white"
-                    : "bg-gray-200 dark:bg-gray-800"
-                )}
-              >
-                {String.fromCharCode(65 + index)}. {option}
+    (question: EnglishQuestion, index: number) => {
+      const handleEditQuestion = (question: EnglishQuestion) => {
+        setEditingQuestion(question);
+        setIsDialogOpen(true);
+      };
+
+      return (
+        <AccordionItem
+          key={question.id}
+          value={`item-${index}`}
+          className="w-full"
+        >
+          <AccordionTrigger>
+            <div className="flex-1 flex justify-between items-center">
+              <div className="flex-1 flex justify-start items-center">
+                <Badge
+                  variant="default"
+                  className="mr-2 bg-[hsl(var(--primary))]"
+                >
+                  {questionTypeMap[question.type]}
+                </Badge>
+                <span className="font-bold text-base max-sm:text-sm text-left break-words">
+                  {question.question}
+                </span>
               </div>
-            ))}
-            <div className="font-semibold mt-4">Explanation:</div>
-            <div className="p-2 bg-gray-200 dark:bg-gray-800 rounded">
-              <MarkDownComponent text={question.explanation} />
+              <div className="flex-shrink-0 flex justify-center items-center space-x-2 max-sm:hidden">
+                <span
+                  className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditQuestion(question);
+                  }}
+                >
+                  <Edit className="h-5 w-5 text-[hsl(var(--primary))]" />
+                </span>
+                <span
+                  className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors !mr-4"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setRemovingQuestionId(question.id);
+                  }}
+                >
+                  <Trash2 className="h-5 w-5 text-red-500" />
+                </span>
+              </div>
             </div>
-          </div>
-        </AccordionContent>
-      </AccordionItem>
-    ),
-    [handleEditQuestion]
+          </AccordionTrigger>
+          <AccordionContent className="bg-[hsl(var(--background-main))] p-2 text-base leading-7 max-sm:text-sm">
+            <div className="space-y-2">
+              <div className="font-semibold">Options:</div>
+              {question.options.map((option, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "p-2 rounded",
+                    question.answer === option
+                      ? "bg-[hsl(var(--primary))] text-white"
+                      : "bg-gray-200 dark:bg-gray-800"
+                  )}
+                >
+                  {String.fromCharCode(65 + index)}. {option}
+                </div>
+              ))}
+              <div className="font-semibold mt-4">Explanation:</div>
+              <div className="p-2 bg-gray-200 dark:bg-gray-800 rounded">
+                <MarkDownComponent text={question.explanation} />
+              </div>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      );
+    },
+    [setEditingQuestion, setIsDialogOpen]
   );
 
   return (
