@@ -22,16 +22,16 @@ const CardItem = ({ paragraph }: { paragraph: Paragraph }) => {
     const hours = Math.floor(diff / (1000 * 60 * 60));
     const minutes = Math.floor(diff / (1000 * 60));
 
-    if (days > 0) return `${days}天前`;
-    if (hours > 0) return `${hours}小时前`;
-    if (minutes > 0) return `${minutes}分钟前`;
-    return "刚刚";
+    if (days > 0) return `${days} days ago`;
+    if (hours > 0) return `${hours} hours ago`;
+    if (minutes > 0) return `${minutes} minutes ago`;
+    return "just now";
   };
 
   return (
     <div
       onClick={() => goDetail(paragraph.id)}
-      className="group relative bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-200 dark:border-gray-700"
+      className="w-[350px] max-sm:w-full h-[286px] group relative bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden border border-gray-200 dark:border-gray-700"
     >
       <div className="absolute top-0 right-0 bg-gradient-to-l from-indigo-600 to-purple-600 text-white px-3 py-1 text-xs font-semibold rounded-bl-lg">
         ID: {paragraph.id}
@@ -55,7 +55,7 @@ const CardItem = ({ paragraph }: { paragraph: Paragraph }) => {
             </span>
           </div>
           <div className="flex items-center text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 transition-colors duration-300">
-            <span className="font-semibold mr-1">查看详情</span>
+            <span className="font-semibold mr-1">View Details</span>
             <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
           </div>
         </div>

@@ -235,3 +235,43 @@ export const deleteQuestionById = async (id: number) => {
     return error;
   }
 };
+
+export const getInterviewQuestionsPaginated = async (
+  page: number,
+  pageSize: number,
+  categoryId?: number
+) => {
+  try {
+    const skip = (page - 1) * pageSize;
+    const whereClause = categoryId ? { categoryId } : {};
+    const [items, total] = await Promise.all([
+      db.interviewQuestion.findMany({
+        where: whereClause,
+        take: pageSize,
+        skip: skip,
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          category: true,
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
+        },
+      }),
+      db.interviewQuestion.count({ where: whereClause }),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+    };
+  } catch (error) {
+    console.error("Error fetching paginated interview questions:", error);
+    return null;
+  }
+};

@@ -310,3 +310,87 @@ export const deleteSentence = async (id: number) => {
     return false;
   }
 };
+
+export const getParagraphsPaginated = async (
+  page: number,
+  pageSize: number
+) => {
+  try {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      db.paragraph.findMany({
+        take: pageSize,
+        skip: skip,
+        orderBy: {
+          updated_at: "desc",
+        },
+      }),
+      db.paragraph.count(),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+    };
+  } catch (error) {
+    console.error("Error fetching paginated paragraphs:", error);
+    return null;
+  }
+};
+
+export const getEnglishQuestionsPaginated = async (
+  page: number,
+  pageSize: number
+) => {
+  try {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      db.englishQuestion.findMany({
+        take: pageSize,
+        skip: skip,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      db.englishQuestion.count(),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+    };
+  } catch (error) {
+    console.error("Error fetching paginated English questions:", error);
+    return null;
+  }
+};
+
+export const getSentencesPaginated = async (page: number, pageSize: number) => {
+  try {
+    const skip = (page - 1) * pageSize;
+    const [items, total] = await Promise.all([
+      db.sentence.findMany({
+        take: pageSize,
+        skip: skip,
+        orderBy: {
+          createdAt: "desc",
+        },
+      }),
+      db.sentence.count(),
+    ]);
+
+    return {
+      items,
+      total,
+      page,
+      pageSize,
+    };
+  } catch (error) {
+    console.error("Error fetching paginated sentences:", error);
+    return null;
+  }
+};

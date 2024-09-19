@@ -20,10 +20,10 @@ import VueIcon from "@/public/vue.svg";
 import OperatorIcon from "@/public/operator.svg";
 import DeleteIcon from "@/public/delete.svg";
 import EditIcon from "@/public/edit.svg";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Category } from "@prisma/client";
 import { getCategoriesApi } from "@/actions/interview/category/get-categories";
-import { getQuestionsByCategoryApi } from "@/actions/interview/question/get-questions";
+import { getInterviewQuestionsPaginatedApi } from "@/actions/interview/question/get-questions-paginated";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -57,9 +57,6 @@ const AccordionTrigger = dynamic(() =>
 const Badge = dynamic(() =>
   import("@/components/ui/badge").then((mod) => mod.Badge)
 );
-const Skeleton = dynamic(() =>
-  import("@/components/ui/skeleton").then((mod) => mod.Skeleton)
-);
 
 import {
   DropdownMenu,
@@ -84,6 +81,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+import { InfiniteScroll } from "@/components/InfiniteScroll";
 
 export default function InterviewPage() {
   const menuData = [
@@ -143,9 +142,49 @@ export default function InterviewPage() {
   const [currentQuestionId, setCurrentQuestionId] = useState<number | null>(
     null
   );
-  const [isPending, startTransition] = useTransition();
   const curUser = useCurrentUser();
   const { toast } = useToast();
+  const [page, setPage] = useState(1);
+  const hasMoreRef = useRef(true);
+  const [currentCategoryId, setCurrentCategoryId] = useState<number | null>(
+    null
+  );
+  const [isFetching, setIsFetching] = useState(false);
+
+  const getQuestions = async (categoryId: number, pageNum: number = 1) => {
+    console.log("getQuestions", categoryId, pageNum);
+    if (isFetching || !hasMoreRef.current) return;
+    setIsFetching(true);
+    try {
+      const res = await getInterviewQuestionsPaginatedApi(
+        pageNum,
+        20,
+        categoryId
+      );
+      if (res.code === 0 && res.data) {
+        setQuestions((prev) => {
+          const newItems = res.data.items.filter(
+            (item) => !prev.some((prevItem) => prevItem.id === item.id)
+          );
+          return [...prev, ...newItems];
+        });
+        hasMoreRef.current = res.data.total > res.data.pageSize * pageNum;
+      }
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  const changeCategory = useCallback((name: string, id: number) => {
+    setCurrentCategory(name);
+    setCurrentCategoryId(id);
+    setPage(1);
+    hasMoreRef.current = true;
+    setQuestions([]);
+    getQuestions(id, 1);
+  }, []);
 
   const getCategories = useCallback(async () => {
     const res = await getCategoriesApi();
@@ -154,32 +193,130 @@ export default function InterviewPage() {
       if (!categories.length) return;
       setCategories(categories);
       setCurrentCategory(categories[0].name);
+      setCurrentCategoryId(categories[0].id);
       getQuestions(categories[0].id);
     }
   }, []);
 
-  const changeCategory = (name: string, id: number) => {
-    setCurrentCategory(name);
-    getQuestions(id);
-  };
-
-  const getQuestions = async (id: number) => {
-    console.log("getQuestions", id);
-    startTransition(async () => {
-      const res = await getQuestionsByCategoryApi(id);
-      if (res.code === 0) {
-        const questions = res.data as any;
-        setQuestions(questions);
-        if (questions.length) {
-          setCurrentCategory(questions[0].category.name);
-        }
-      }
-    });
-  };
-
   useEffect(() => {
     getCategories();
   }, [getCategories]);
+
+  const loadMore = useCallback(async () => {
+    if (currentCategoryId !== null && !isFetching) {
+      setIsFetching(true);
+      try {
+        const res = await getInterviewQuestionsPaginatedApi(
+          page + 1,
+          20,
+          currentCategoryId
+        );
+        if (res.code === 0 && res.data) {
+          console.log("res.data", res.data);
+          setQuestions((prev) => {
+            const newItems = res.data.items.filter(
+              (item) => !prev.some((prevItem) => prevItem.id === item.id)
+            );
+            return [...prev, ...newItems];
+          });
+          setPage(page + 1);
+          hasMoreRef.current = res.data.total > res.data.pageSize * (page + 1);
+        }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      } finally {
+        setIsFetching(false);
+      }
+    }
+  }, [currentCategoryId, isFetching, page]);
+
+  const renderQuestion = useCallback(
+    (question: any, index: number) => (
+      <AccordionItem key={index} value={`item-${index}`} className="w-full">
+        <AccordionTrigger>
+          <div className="flex-1 flex justify-between items-center">
+            <div className="flex-1 flex justify-start items-center">
+              <Badge
+                variant="default"
+                className={`mr-2 ${
+                  question.difficulty === "EASY"
+                    ? "bg-green-500"
+                    : question.difficulty === "MEDIUM"
+                    ? "bg-yellow-500"
+                    : "bg-red-500"
+                }`}
+              >
+                {question.difficulty}
+              </Badge>
+              <span className="font-bold text-base max-sm:text-sm truncate max-sm:w-[250px] text-left">
+                {question.questionText}
+              </span>
+            </div>
+            <div className="flex justify-center items-center max-sm:hidden">
+              {question.tags?.map((tag: any, index: number) => (
+                <Badge key={index} variant="secondary" className="mr-2 py-1">
+                  {tag.tag.name}
+                </Badge>
+              ))}
+              <Badge
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (curUser?.role === "USER") {
+                    toast({
+                      variant: "destructive",
+                      title: "Oops!",
+                      description: (
+                        <span>Only operator can edit the question</span>
+                      ),
+                    });
+                    return;
+                  }
+                  setIsAddQuestionDialogOpen(true);
+                  setCurrentQuestionId(question.id);
+                }}
+                variant="default"
+                className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
+              >
+                <EditIcon width={15} height={15} />
+              </Badge>
+              <Badge
+                variant="destructive"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (curUser?.role === "USER") {
+                    toast({
+                      variant: "destructive",
+                      title: "Oops!",
+                      description: (
+                        <span>Only operator can delete the question</span>
+                      ),
+                    });
+                    return;
+                  }
+                  setCurrentQuestionId(question.id);
+                  setIsRemoveQuestionDialogOpen(true);
+                }}
+                className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
+              >
+                <DeleteIcon width={15} height={15} />
+              </Badge>
+            </div>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent className="max-h-[800px] overflow-auto bg-[hsl(var(--background-main))] p-2 text-base leading-7 max-sm:text-sm">
+          <MarkDownComponent text={question.answerContent} />
+        </AccordionContent>
+      </AccordionItem>
+    ),
+    [
+      curUser?.role,
+      setIsAddQuestionDialogOpen,
+      setCurrentQuestionId,
+      setIsRemoveQuestionDialogOpen,
+      toast,
+    ]
+  );
+
   return (
     <div className="w-full h-full flex justify-center items-center">
       <AddQuestionDialog
@@ -201,36 +338,27 @@ export default function InterviewPage() {
       />
       <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 flex flex-col justify-start items-center max-sm:hidden">
         <div className="w-full flex-1">
-          {categories.length ? (
-            categories.map((item, index) => (
+          {categories.map((item, index) => (
+            <div
+              className="w-full cursor-pointer my-4"
+              onClick={() => changeCategory(item.name, item.id)}
+              key={item.name}
+            >
               <div
-                className="w-full cursor-pointer my-4"
-                onClick={() => changeCategory(item.name, item.id)}
-                key={item.name}
-              >
-                <div
-                  className={`
+                className={`
                   px-4 mx-4 flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointe ${
                     currentCategory === item.name
                       ? "bg-[hsl(var(--primary))] hover:!bg-[hsl(var(--primary))] text-white"
                       : ""
                   }`}
-                >
-                  <div className="mr-2">
-                    {menuData.find((m) => m.title === item.name)?.icon}
-                  </div>
-                  {item.name}
+              >
+                <div className="mr-2">
+                  {menuData.find((m) => m.title === item.name)?.icon}
                 </div>
+                {item.name}
               </div>
-            ))
-          ) : (
-            <div className="space-y-4 px-4 mt-4">
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
             </div>
-          )}
+          ))}
         </div>
         <div className="mb-4 w-full px-2">
           <DropdownMenu>
@@ -262,8 +390,8 @@ export default function InterviewPage() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="flex-1 h-full p-4 bg-[hsl(var(--background-nav))] w-0 rounded-lg overflow-auto">
-        <div className="w-full sm:hidden mb-4">
+      <div className="flex-1 h-full bg-[hsl(var(--background-nav))] w-0 rounded-lg max-sm:flex max-sm:flex-col">
+        <div className="w-full sm:hidden my-4 px-4">
           <Select
             defaultValue={categories[0]?.id.toString()}
             onValueChange={(value) => {
@@ -293,99 +421,18 @@ export default function InterviewPage() {
           </Select>
         </div>
 
-        <Accordion type="single" collapsible className="w-full">
-          {!isPending ? (
-            questions.map((question, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger>
-                  <div className="flex-1 flex justify-between items-center">
-                    <div className="flex-1 flex justify-start items-center">
-                      <Badge
-                        variant="default"
-                        className={`mr-2 ${
-                          question.difficulty === "EASY"
-                            ? "bg-green-500"
-                            : question.difficulty === "MEDIUM"
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
-                        }`}
-                      >
-                        {question.difficulty}
-                      </Badge>
-                      <span className="font-bold text-base max-sm:text-sm truncate max-sm:w-[250px] text-left">
-                        {question.questionText}
-                      </span>
-                    </div>
-                    <div className="flex justify-center items-center max-sm:hidden">
-                      {question.tags?.map((tag: any, index: number) => (
-                        <Badge
-                          key={index}
-                          variant="secondary"
-                          className="mr-2 py-1"
-                        >
-                          {tag.tag.name}
-                        </Badge>
-                      ))}
-                      <Badge
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (curUser?.role === "USER") {
-                            toast({
-                              variant: "destructive",
-                              title: "Oops!",
-                              description: (
-                                <span>Only operator can edit the question</span>
-                              ),
-                            });
-                            return;
-                          }
-                          setIsAddQuestionDialogOpen(true);
-                          setCurrentQuestionId(question.id);
-                        }}
-                        variant="default"
-                        className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
-                      >
-                        <EditIcon width={15} height={15} />
-                      </Badge>
-                      <Badge
-                        variant="destructive"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (curUser?.role === "USER") {
-                            toast({
-                              variant: "destructive",
-                              title: "Oops!",
-                              description: (
-                                <span>
-                                  Only operator can delete the question
-                                </span>
-                              ),
-                            });
-                            return;
-                          }
-                          setCurrentQuestionId(question.id);
-                          setIsRemoveQuestionDialogOpen(true);
-                        }}
-                        className="w-[26px] h-[22px] px-0 py-0 flex justify-center items-center mr-2"
-                      >
-                        <DeleteIcon width={15} height={15} />
-                      </Badge>
-                    </div>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="max-h-[800px] overflow-auto bg-[hsl(var(--background-main))] p-2 text-base leading-7 max-sm:text-sm">
-                  <MarkDownComponent text={question.answerContent} />
-                </AccordionContent>
-              </AccordionItem>
-            ))
-          ) : (
-            <div className="space-y-4 px-4 mt-4">
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-              <Skeleton className="h-12 w-full" />
-            </div>
-          )}
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full sm:h-full max-sm:flex-1 max-sm:overflow-auto"
+        >
+          <InfiniteScroll
+            items={questions}
+            loadMore={loadMore}
+            hasMore={hasMoreRef.current}
+            isLoading={isFetching}
+            renderItem={renderQuestion}
+          />
         </Accordion>
       </div>
     </div>
