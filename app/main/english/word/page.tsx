@@ -61,7 +61,7 @@ export default function WordPage() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-start items-center px-4 sm:px-6 lg:px-8">
+    <div className="w-full h-full flex flex-col justify-start items-center px-4 sm:px-6 lg:px-8 py-4">
       <AddWordDialog
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}

@@ -13,6 +13,7 @@ import AddParagraphDialog from "./components/add-paragraph-dialog";
 import { Paragraph } from "@prisma/client";
 import { Divide, Plus } from "lucide-react";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function ParagraphPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function ParagraphPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const curUser = useCurrentUser();
 
   const loadMore = useCallback(async () => {
     if (!hasMore || isLoading) return;
@@ -56,6 +58,7 @@ export default function ParagraphPage() {
           Paragraph
         </h1>
         <Button
+          disabled={curUser?.role === "USER"}
           onClick={() => setIsOpen(true)}
           className="bg-[hsl(var(--primary))] text-white shrink-0"
         >

@@ -38,8 +38,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { MarkDownComponent } from "@/components/markdown";
-import { useInView } from "react-intersection-observer";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { toast } from "@/components/ui/use-toast";
 
 const questionTypeMap = {
   [QuestionType.SINGLE_CHOICE]: "Single Choice",
@@ -60,6 +61,7 @@ export default function QuestionsPage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const curUser = useCurrentUser();
 
   const getQuestions = useCallback(async (pageNum: number) => {
     setIsLoading(true);
@@ -149,6 +151,16 @@ export default function QuestionsPage() {
                 <span
                   className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors"
                   onClick={(e) => {
+                    if (curUser?.role === "USER") {
+                      toast({
+                        variant: "destructive",
+                        title: "Oops!",
+                        description: (
+                          <span>Only operator can edit the question</span>
+                        ),
+                      });
+                      return;
+                    }
                     e.stopPropagation();
                     handleEditQuestion(question);
                   }}
@@ -158,6 +170,16 @@ export default function QuestionsPage() {
                 <span
                   className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors !mr-4"
                   onClick={(e) => {
+                    if (curUser?.role === "USER") {
+                      toast({
+                        variant: "destructive",
+                        title: "Oops!",
+                        description: (
+                          <span>Only operator can delete the question</span>
+                        ),
+                      });
+                      return;
+                    }
                     e.stopPropagation();
                     setRemovingQuestionId(question.id);
                   }}
@@ -221,7 +243,11 @@ export default function QuestionsPage() {
               ))}
             </SelectContent>
           </Select>
-          <Button onClick={handleAddQuestion} className="flex items-center">
+          <Button
+            onClick={handleAddQuestion}
+            className="flex items-center"
+            disabled={curUser?.role === "USER"}
+          >
             <PlusCircle className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Add Question</span>
             <span className="sm:hidden">Add</span>

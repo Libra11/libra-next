@@ -336,8 +336,8 @@ export default function InterviewPage() {
         currentQuestionId={currentQuestionId || 0}
         updateQuestionInList={getQuestions}
       />
-      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 flex flex-col justify-start items-center max-sm:hidden">
-        <div className="w-full flex-1">
+      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 flex flex-col justify-start items-center max-sm:hidden overflow-hidden">
+        <div className="w-full flex-1 overflow-y-auto">
           {categories.map((item, index) => (
             <div
               className="w-full cursor-pointer my-4"
@@ -346,7 +346,7 @@ export default function InterviewPage() {
             >
               <div
                 className={`
-                  px-4 mx-4 flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointe ${
+                  px-4 mx-4 flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointer ${
                     currentCategory === item.name
                       ? "bg-[hsl(var(--primary))] hover:!bg-[hsl(var(--primary))] text-white"
                       : ""
@@ -360,7 +360,7 @@ export default function InterviewPage() {
             </div>
           ))}
         </div>
-        <div className="mb-4 w-full px-2">
+        <div className="mb-4 w-full px-2 flex-shrink-0">
           <DropdownMenu>
             <DropdownMenuTrigger asChild className="w-full">
               <Button variant="secondary" disabled={curUser?.role === "USER"}>

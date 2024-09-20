@@ -16,6 +16,7 @@ import { initClient } from "@/lib/aliyun-oss";
 import { MarkDownComponent } from "@/components/markdown";
 import { Button } from "@/components/ui/button";
 import EditParagraphDialog from "../components/edit-paragraph-dialog";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export default function ParagraphDetailPage() {
   const { id } = useParams();
@@ -28,6 +29,7 @@ export default function ParagraphDetailPage() {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const curUser = useCurrentUser();
 
   const parse = (srtContent: string) => {
     const res = parseSrt(srtContent);
@@ -59,7 +61,7 @@ export default function ParagraphDetailPage() {
   }, [id, getParagraph]);
 
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full p-4">
       <div className="flex-grow flex flex-col lg:flex-row gap-4 sm:gap-6 mb-6 overflow-auto">
         <div className="w-full lg:w-[500px] flex flex-col gap-4 sm:gap-6">
           <div className="bg-card text-card-foreground rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
@@ -91,6 +93,7 @@ export default function ParagraphDetailPage() {
             {title}
           </h1>
           <Button
+            disabled={curUser?.role === "USER"}
             onClick={() => setIsEditDialogOpen(true)}
             className="bg-white text-indigo-600 hover:bg-indigo-100 mt-2 sm:mt-0"
           >

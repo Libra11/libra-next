@@ -23,7 +23,8 @@ import {
 import { MarkDownComponent } from "@/components/markdown";
 import { InfiniteScroll } from "@/components/InfiniteScroll";
 import { getSentencesPaginatedApi } from "@/actions/english/sentence/get-sentences-paginated";
-
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { toast } from "@/components/ui/use-toast";
 export default function SentencesPage() {
   const [sentences, setSentences] = useState<Sentence[]>([]);
   const [editingSentence, setEditingSentence] = useState<Sentence | null>(null);
@@ -34,6 +35,7 @@ export default function SentencesPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const curUser = useCurrentUser();
 
   useEffect(() => {
     const fetchSentences = async () => {
@@ -111,6 +113,16 @@ export default function SentencesPage() {
               <span
                 className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors"
                 onClick={(e) => {
+                  if (curUser?.role === "USER") {
+                    toast({
+                      variant: "destructive",
+                      title: "Oops!",
+                      description: (
+                        <span>Only operator can edit the sentence</span>
+                      ),
+                    });
+                    return;
+                  }
                   e.stopPropagation();
                   handleEditSentence(sentence);
                 }}
@@ -120,6 +132,16 @@ export default function SentencesPage() {
               <span
                 className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md cursor-pointer transition-colors !mr-4"
                 onClick={(e) => {
+                  if (curUser?.role === "USER") {
+                    toast({
+                      variant: "destructive",
+                      title: "Oops!",
+                      description: (
+                        <span>Only operator can delete the sentence</span>
+                      ),
+                    });
+                    return;
+                  }
                   e.stopPropagation();
                   setRemovingSentenceId(sentence.id);
                 }}
@@ -149,7 +171,11 @@ export default function SentencesPage() {
     <div className="h-full overflow-auto">
       <div className="px-4 pt-4 flex justify-between items-center">
         <h1 className="text-3xl font-bold">Sentence Analysis</h1>
-        <Button onClick={handleAddSentence} className="flex items-center">
+        <Button
+          onClick={handleAddSentence}
+          className="flex items-center"
+          disabled={curUser?.role === "USER"}
+        >
           <PlusCircle className="w-4 h-4 mr-2" />
           Add Sentence
         </Button>
