@@ -7,7 +7,7 @@
 "use server";
 
 import { code } from "@/common/code";
-import { updateSessionName } from "@/data/gemini";
+import { updateSessionName } from "@/data/chat";
 
 export const ModifySessionName = async (sessionId: string, name: string) => {
   try {

@@ -5,7 +5,7 @@
  * Description:
  */
 import { useState, useEffect } from "react";
-import { ModifySessionName } from "@/actions/gemini/update-session-name";
+import { ModifySessionName } from "@/actions/chat/update-session-name";
 import DeleteIcon from "@/public/delete.svg";
 import RenameIcon from "@/public/rename.svg";
 import { Input } from "@/components/ui/input";

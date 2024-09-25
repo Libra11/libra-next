@@ -1,26 +1,26 @@
 /*
  * @Author: Libra
- * @Date: 2024-07-09 16:05:46
+ * @Date: 2024-07-09 15:44:14
  * @LastEditors: Libra
  * @Description:
  */
 "use server";
 
 import { code } from "@/common/code";
-import { GetMessage, GetSession } from "@/data/gemini";
+import { GetSession } from "@/data/chat";
 
-export const getMessages = async (userId: string) => {
+export const getSessions = async (userId: string) => {
   try {
-    const session = await GetMessage(userId);
+    const session = await GetSession(userId);
     return {
       code: 0,
-      message: "Get messages success",
+      message: "Get session success",
       data: session,
     };
   } catch (error) {
     return {
       code: code.SERVER_ERROR,
-      message: "Get messages failed",
+      message: "Get session failed",
       data: null,
     };
   }

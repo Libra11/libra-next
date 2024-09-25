@@ -7,7 +7,7 @@
 "use server";
 
 import { code } from "@/common/code";
-import { DeleteSession } from "@/data/gemini";
+import { DeleteSession } from "@/data/chat";
 
 export const deleteSession = async (sessionId: string) => {
   try {

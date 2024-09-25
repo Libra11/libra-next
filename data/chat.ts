@@ -4,7 +4,7 @@
  * @LastEditors: Libra
  * @Description:
  */
-import { Session } from "@/app/main/gemini/sessionList";
+import { Session } from "@/app/main/chat/sessionList";
 import { db } from "@/lib/db";
 
 export const AddSession = async (userId: string): Promise<Session | null> => {
@@ -18,6 +18,7 @@ export const AddSession = async (userId: string): Promise<Session | null> => {
       },
     });
   } catch (error) {
+    console.log("error", userId);
     console.log(error);
   }
   return session;

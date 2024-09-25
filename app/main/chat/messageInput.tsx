@@ -30,7 +30,7 @@ export function MessageInput({ onSendMessage, isPending }: MessageInputProps) {
         value={msg}
         onChange={(e) => setMsg(e.target.value)}
         className="flex-1 p-0 pl-4 min-h-10 py-1 border-none shadow-none outline-none focus-visible:ring-0"
-        placeholder="☺Type your message to Gemini..."
+        placeholder="☺Type your message to AI..."
         onKeyDown={handleKeyDown}
       />
       <Button

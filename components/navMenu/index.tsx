@@ -17,10 +17,12 @@ import { Button } from "../ui/button";
 import { logout } from "@/actions/logout";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import GeminiIcon from "@/public/gemini.svg";
+import ChatIcon from "@/public/chat.svg";
 import EnglishIcon from "@/public/english.svg";
 import InterviewIcon from "@/public/interview.svg";
 import BlogIcon from "@/public/blog.svg";
+import STTIcon from "@/public/stt.svg";
+import TTSIcon from "@/public/tts.svg";
 
 export const menuData = [
   {
@@ -29,9 +31,9 @@ export const menuData = [
     link: "/main",
   },
   {
-    title: "Gemini",
-    icon: <GeminiIcon width={24} height={24} />,
-    link: "/main/gemini",
+    title: "Chat",
+    icon: <ChatIcon width={24} height={24} />,
+    link: "/main/chat",
   },
   {
     title: "English",
@@ -47,6 +49,21 @@ export const menuData = [
     title: "Blog",
     icon: <BlogIcon width={24} height={24} />,
     link: "/main/blog",
+  },
+  {
+    title: "STT",
+    icon: <STTIcon width={24} height={24} />,
+    link: "/main/stt",
+  },
+  {
+    title: "TTS",
+    icon: <TTSIcon width={24} height={24} />,
+    link: "/main/tts",
+  },
+  {
+    title: "Animate",
+    icon: <BlogIcon width={24} height={24} />,
+    link: "/main/animate",
   },
 ];
 

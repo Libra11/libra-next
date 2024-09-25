@@ -6,9 +6,9 @@
  */
 "use server";
 
-import { Session } from "@/app/main/gemini/sessionList";
+import { Session } from "@/app/main/chat/sessionList";
 import { code } from "@/common/code";
-import { AddSession } from "@/data/gemini";
+import { AddSession } from "@/data/chat";
 
 export const addSessions = async (userId: string) => {
   try {

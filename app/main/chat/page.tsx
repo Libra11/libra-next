@@ -7,11 +7,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import useGeminiChat from "@/hooks/useGeminiChat";
+import useAIChat from "@/hooks/useAIChat";
 import LibraIcon from "@/public/Libra.svg";
+import GeminiIcon from "@/public/gemini.svg";
+import ChatGPTIcon from "@/public/chatgpt.svg";
 import { ChevronRight } from "lucide-react";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import dynamic from "next/dynamic";
+import { toast } from "@/components/ui/use-toast";
 
 const SessionList = dynamic(() =>
   import("./sessionList").then((mod) => mod.SessionList)
@@ -42,7 +51,7 @@ const SheetTrigger = dynamic(() =>
   import("@/components/ui/sheet").then((mod) => mod.SheetTrigger)
 );
 
-export default function GeminiPage() {
+export default function AIChatPage() {
   const {
     history,
     sessions,
@@ -52,10 +61,13 @@ export default function GeminiPage() {
     addNewSession,
     getCurrentSessionMessages,
     deleteCurrentSession,
-  } = useGeminiChat();
+    selectedModel,
+    setSelectedModel,
+  } = useAIChat();
 
   const user = useCurrentUser();
   const image = user?.image;
+  const isAdmin = user?.role === "ADMIN";
 
   return (
     <div className="w-full h-full flex justify-center items-center max-sm:text-sm">
@@ -96,6 +108,52 @@ export default function GeminiPage() {
               />
             </SheetContent>
           </Sheet>
+        </div>
+
+        <div className=" self-end mt-4">
+          <Select
+            value={selectedModel}
+            onValueChange={(value: "gemini" | "gpt-3.5-turbo" | "gpt-4") => {
+              if (
+                (value === "gpt-3.5-turbo" || value === "gpt-4") &&
+                !isAdmin
+              ) {
+                toast({
+                  variant: "destructive",
+                  title: "Oops!",
+                  description: (
+                    <span>Only admin can use gpt-3.5-turbo and gpt-4</span>
+                  ),
+                });
+                return;
+              }
+              setSelectedModel(value);
+            }}
+          >
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Select Model" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="gemini">
+                <div className="flex items-center">
+                  <GeminiIcon width={20} height={20} />
+                  <span className="ml-2">Gemini</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="gpt-3.5-turbo">
+                <div className="flex items-center">
+                  <ChatGPTIcon width={20} height={20} />
+                  <span className="ml-2">GPT-3.5-turbo</span>
+                </div>
+              </SelectItem>
+              <SelectItem value="gpt-4">
+                <div className="flex items-center">
+                  <ChatGPTIcon width={20} height={20} />
+                  <span className="ml-2">GPT-4</span>
+                </div>
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <ChatHistory history={history} userImage={image || undefined} />

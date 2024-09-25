@@ -7,7 +7,7 @@
 "use server";
 
 import { code } from "@/common/code";
-import { AddMessage } from "@/data/gemini";
+import { AddMessage } from "@/data/chat";
 
 export const addMessages = async (
   sessionId: string,

@@ -8,7 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { MarkDownComponent } from "@/components/markdown";
 import { useEffect, useState } from "react";
 import { Content } from "@google/generative-ai";
-import GeminiIcon from "@/public/gemini.svg";
+import AIIcon from "@/public/AI.svg";
 import Loading from "@/components/loading";
 
 interface ChatHistoryProps {
@@ -77,7 +77,7 @@ export function ChatHistory({ history, userImage }: ChatHistoryProps) {
 
           {item.role === "model" ? (
             <div className="w-12 h-12 ml-2 mt-6 rounded-full bg-[hsl(var(--primary))] text-white flex justify-center items-center max-sm:hidden">
-              <GeminiIcon width={24} height={24} />
+              <AIIcon width={24} height={24} />
             </div>
           ) : null}
         </div>
