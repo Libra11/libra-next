@@ -74,7 +74,6 @@ const AddParagraphDialog = ({
           updated_at: new Date(),
         };
         const res = await addParagraphApi(paragraphData);
-        console.log(res, data);
         if (res.code === 0) {
           setSuccess("Add paragraph success");
           form.reset();

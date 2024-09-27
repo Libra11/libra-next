@@ -27,6 +27,7 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
+      <link rel="icon" href="/Libra.svg" />
       <SessionProvider session={session}>
         <body className={`${inter.className}`}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

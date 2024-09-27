@@ -152,7 +152,6 @@ export default function InterviewPage() {
   const [isFetching, setIsFetching] = useState(false);
 
   const getQuestions = async (categoryId: number, pageNum: number = 1) => {
-    console.log("getQuestions", categoryId, pageNum);
     if (isFetching || !hasMoreRef.current) return;
     setIsFetching(true);
     try {
@@ -212,7 +211,6 @@ export default function InterviewPage() {
           currentCategoryId
         );
         if (res.code === 0 && res.data) {
-          console.log("res.data", res.data);
           setQuestions((prev) => {
             const newItems = res.data.items.filter(
               (item) => !prev.some((prevItem) => prevItem.id === item.id)

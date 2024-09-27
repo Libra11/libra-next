@@ -152,7 +152,6 @@ const AddQuestionDialog = ({
   useEffect(() => {
     if (!isOpen) return;
     const loadQuestion = async (id: number) => {
-      console.log("loadQuestion");
       await getTags();
       await getCategories();
       if (id) {

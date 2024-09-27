@@ -31,7 +31,6 @@ export const addWord = async (word: Word) => {
         },
       },
     });
-    console.log("success", res);
     return res;
   } catch (error) {
     return null;
@@ -151,7 +150,6 @@ export const getParagraph = async (id: number) => {
 };
 
 export const updateParagraph = async (data: ParagraphData) => {
-  console.log("Updating paragraph in database:", data);
   try {
     const updatedParagraph = await db.paragraph.update({
       where: { id: data.id },
@@ -165,7 +163,6 @@ export const updateParagraph = async (data: ParagraphData) => {
         updated_at: new Date(),
       },
     });
-    console.log("Updated paragraph:", updatedParagraph);
     return updatedParagraph;
   } catch (error) {
     console.error("更新段落时出错:", error);

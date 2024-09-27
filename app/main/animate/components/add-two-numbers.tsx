@@ -116,7 +116,6 @@ export default function AddTwoNumbersDetailedAnimation() {
     }
 
     if (carry > 0) {
-      console.log(JSON.stringify(dummyHead));
       cur.next = { val: carry, next: null };
       setCurrentSum(carry);
       setDescription(
@@ -126,7 +125,6 @@ export default function AddTwoNumbersDetailedAnimation() {
       setCur(cur);
       await new Promise((resolve) => setTimeout(resolve, 2000));
       setHead({ ...dummyHead });
-      console.log(JSON.stringify(dummyHead));
       setStep((prev) => prev + 1);
     }
 

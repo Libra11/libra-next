@@ -32,7 +32,6 @@ import { changeUserInfo } from "@/actions/user/modify";
 import { collapseContext } from "@/app/main/layout";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
@@ -72,56 +71,83 @@ export function CustomHeader() {
   return (
     <>
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-sm:w-11/12">
+        <DialogContent className="max-sm:w-11/12 max-w-md">
           <DialogHeader>
-            <DialogTitle>Setting</DialogTitle>
+            <DialogTitle className="text-2xl font-bold">Setting</DialogTitle>
           </DialogHeader>
-          <div className="flex-col justify-center space-y-4 text-sm my-4">
-            <div className="flex justify-between items-center">
-              <span className="font-bold">Theme</span>
+          <div className="flex-col justify-center space-y-6 text-sm my-6">
+            <div className="space-y-4">
+              <div className="flex items-center space-x-4">
+                <Avatar className="w-16 h-16">
+                  <AvatarImage src={user?.image || undefined} />
+                  <AvatarFallback className="bg-[hsl(var(--background-main))] text-2xl">
+                    {user?.name?.[0] || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-semibold text-lg">
+                    {user?.name || "No Name"}
+                  </h3>
+                  <p className="text-muted-foreground">
+                    {user?.email || "No Email"}
+                  </p>
+                </div>
+              </div>
+              <div className="border-t pt-4">
+                <h4 className="font-semibold mb-2">User Role</h4>
+                <p className="text-muted-foreground capitalize">
+                  {user?.role.toLowerCase()}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h4 className="font-semibold">Theme</h4>
               <RadioGroup
                 defaultValue={theme}
                 onValueChange={(theme) => setTheme(theme)}
-                className="flex"
+                className="flex space-x-4"
               >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="system" id="r1" />
-                  <Label htmlFor="r1">System</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="light" id="r2" />
-                  <Label htmlFor="r2">Light</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="dark" id="r3" />
-                  <Label htmlFor="r3">Dark</Label>
-                </div>
+                {["system", "light", "dark"].map((t) => (
+                  <div key={t} className="flex items-center space-x-2">
+                    <RadioGroupItem value={t} id={`theme-${t}`} />
+                    <Label htmlFor={`theme-${t}`} className="capitalize">
+                      {t}
+                    </Label>
+                  </div>
+                ))}
               </RadioGroup>
             </div>
-            <div className="flex justify-between items-center">
-              <div className="font-bold flex justify-center items-center">
-                <span className="mr-1">IsTwoFactorEnabled</span>
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <InfoCircledIcon />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>
-                        GitHub and Google users do not need to enable two-factor
-                        authentication.
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="flex items-center space-x-2">
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="font-semibold flex items-center space-x-2">
+                  <span>Two-factor authentication</span>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <InfoCircledIcon />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          GitHub and Google users do not need to enable
+                          two-factor authentication.
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
                 <Switch
                   disabled={isGitHubOrGoogle}
                   checked={isTwoFactorEnabled}
                   onCheckedChange={changeIsTwoFactorEnabled}
                 />
               </div>
+              {isGitHubOrGoogle && (
+                <p className="text-sm text-muted-foreground">
+                  Third-party account login does not need to be set
+                </p>
+              )}
             </div>
           </div>
           <DialogFooter>
@@ -152,7 +178,7 @@ export function CustomHeader() {
               </span>
             </DrawerTrigger>
             <DrawerContent
-              className="top-0 right-0 left-auto mt-0 w-[240px] rounded-none"
+              className="top-0 right-0 left-auto mt-0 w-[240px] rounded-none h-full flex flex-col"
               showBar={false}
             >
               <DrawerHeader>
@@ -161,8 +187,8 @@ export function CustomHeader() {
                   <LibraIcon className="w-16 h-16" />
                 </DrawerDescription>
               </DrawerHeader>
-              <div className="flex flex-col justify-center items-center h-full">
-                <div className="flex-1 w-full">
+              <div className="flex flex-col h-full overflow-hidden">
+                <div className="flex-1 overflow-y-auto">
                   {menuData.map((item, index) => (
                     <NavMenuItem
                       key={index}

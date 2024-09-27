@@ -82,7 +82,6 @@ const EditParagraphDialog = ({
           ...data,
           updated_at: new Date(),
         });
-        console.log("API response:", res);
         if (res.code === 0) {
           setSuccess("Update paragraph success");
           onUpdate();

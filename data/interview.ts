@@ -231,7 +231,6 @@ export const deleteQuestionById = async (id: number) => {
     });
     return question;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };

@@ -18,7 +18,6 @@ export const AddSession = async (userId: string): Promise<Session | null> => {
       },
     });
   } catch (error) {
-    console.log("error", userId);
     console.log(error);
   }
   return session;
