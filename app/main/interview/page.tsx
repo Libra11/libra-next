@@ -83,6 +83,14 @@ import {
 } from "@/components/ui/select";
 
 import { InfiniteScroll } from "@/components/InfiniteScroll";
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function InterviewPage() {
   const menuData = [
@@ -150,6 +158,7 @@ export default function InterviewPage() {
     null
   );
   const [isFetching, setIsFetching] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const getQuestions = async (categoryId: number, pageNum: number = 1) => {
     if (isFetching || !hasMoreRef.current) return;
@@ -316,123 +325,156 @@ export default function InterviewPage() {
   );
 
   return (
-    <div className="w-full h-full flex justify-center items-center">
-      <AddQuestionDialog
-        isOpen={isAddQuestionDialogOpen}
-        setIsOpen={setIsAddQuestionDialogOpen}
-        currentQuestionId={currentQuestionId || 0}
-        updateQuestionInList={getQuestions}
-      />
-      <TagDialog isOpen={isTagDialogOpen} setIsOpen={setIsTagDialogOpen} />
-      <CategoryDialog
-        isOpen={isCategoryDialogOpen}
-        setIsOpen={setIsCategoryDialogOpen}
-      />
-      <RemoveQuestionDialog
-        isOpen={isRemoveQuestionDialogOpen}
-        setIsOpen={setIsRemoveQuestionDialogOpen}
-        currentQuestionId={currentQuestionId || 0}
-        updateQuestionInList={getQuestions}
-      />
-      <div className="h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg w-60 flex flex-col justify-start items-center max-sm:hidden overflow-hidden">
-        <div className="w-full flex-1 overflow-y-auto">
-          {categories.map((item, index) => (
-            <div
-              className="w-full cursor-pointer my-4"
-              onClick={() => changeCategory(item.name, item.id)}
-              key={item.name}
-            >
-              <div
-                className={`
-                  px-4 mx-4 flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointer ${
-                    currentCategory === item.name
-                      ? "bg-[hsl(var(--primary))] hover:!bg-[hsl(var(--primary))] text-white"
-                      : ""
-                  }`}
-              >
-                <div className="mr-2">
-                  {menuData.find((m) => m.title === item.name)?.icon}
-                </div>
-                {item.name}
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mb-4 w-full px-2 flex-shrink-0">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild className="w-full">
-              <Button variant="secondary" disabled={curUser?.role === "USER"}>
-                <OperatorIcon className="mr-2" width={15} height={15} />
-                Operator
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuItem
-                onClick={() => {
-                  setIsAddQuestionDialogOpen(true);
-                  setCurrentQuestionId(null);
-                }}
-              >
-                Add
-                <DropdownMenuShortcut>⇧⌘A</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsTagDialogOpen(true)}>
-                Tag
-                <DropdownMenuShortcut>⇧⌘T</DropdownMenuShortcut>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsCategoryDialogOpen(true)}>
-                Category
-                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-      <div className="flex-1 h-full bg-[hsl(var(--background-nav))] w-0 rounded-lg max-sm:flex max-sm:flex-col">
-        <div className="w-full sm:hidden my-4 px-4">
-          <Select
-            defaultValue={categories[0]?.id.toString()}
-            onValueChange={(value) => {
-              const category = categories.find(
-                (c) => c.id.toString() === value
-              );
-              if (category) {
-                changeCategory(category.name, category.id);
-              }
-            }}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select Category" />
-            </SelectTrigger>
-            <SelectContent>
-              {categories.map((item) => (
-                <SelectItem key={item.id} value={item.id.toString()}>
-                  <div className="flex items-center">
-                    <div className="mr-2">
-                      {menuData.find((m) => m.title === item.name)?.icon}
-                    </div>
-                    {item.name}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <Accordion
-          type="single"
-          collapsible
-          className="w-full sm:h-full max-sm:flex-1 max-sm:overflow-auto"
+    <TooltipProvider>
+      <div className="w-full h-full flex justify-center items-center">
+        <AddQuestionDialog
+          isOpen={isAddQuestionDialogOpen}
+          setIsOpen={setIsAddQuestionDialogOpen}
+          currentQuestionId={currentQuestionId || 0}
+          updateQuestionInList={getQuestions}
+        />
+        <TagDialog isOpen={isTagDialogOpen} setIsOpen={setIsTagDialogOpen} />
+        <CategoryDialog
+          isOpen={isCategoryDialogOpen}
+          setIsOpen={setIsCategoryDialogOpen}
+        />
+        <RemoveQuestionDialog
+          isOpen={isRemoveQuestionDialogOpen}
+          setIsOpen={setIsRemoveQuestionDialogOpen}
+          currentQuestionId={currentQuestionId || 0}
+          updateQuestionInList={getQuestions}
+        />
+        <div
+          className={`h-full mr-2 bg-[hsl(var(--background-nav))] rounded-lg ${
+            isCollapsed ? "w-20" : "w-60"
+          } flex flex-col justify-start items-center max-sm:hidden overflow-hidden transition-all duration-300`}
         >
-          <InfiniteScroll
-            items={questions}
-            loadMore={loadMore}
-            hasMore={hasMoreRef.current}
-            isLoading={isFetching}
-            renderItem={renderQuestion}
-          />
-        </Accordion>
+          <div className="w-full flex-1 overflow-y-auto">
+            {categories.map((item, index) => (
+              <Tooltip key={item.name}>
+                <TooltipTrigger asChild>
+                  <div
+                    className="w-full cursor-pointer my-4"
+                    onClick={() => changeCategory(item.name, item.id)}
+                  >
+                    <div
+                      className={`
+                        ${
+                          isCollapsed
+                            ? "justify-center w-12 mx-auto"
+                            : "px-4 mx-4"
+                        } 
+                        flex items-center transition-all h-12 rounded-lg py-2 hover:bg-[hsl(var(--accent))] cursor-pointer ${
+                          currentCategory === item.name
+                            ? "bg-[hsl(var(--primary))] hover:!bg-[hsl(var(--primary))] text-white"
+                            : ""
+                        }`}
+                    >
+                      <div className={isCollapsed ? "" : "mr-2"}>
+                        {menuData.find((m) => m.title === item.name)?.icon}
+                      </div>
+                      {!isCollapsed && item.name}
+                    </div>
+                  </div>
+                </TooltipTrigger>
+                {isCollapsed && (
+                  <TooltipContent side="right">
+                    <p>{item.name}</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            ))}
+          </div>
+          <div className="mb-4 w-full px-2 flex-shrink-0">
+            <Button
+              variant="secondary"
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className="w-full mb-2"
+            >
+              {isCollapsed ? (
+                <ChevronRightIcon className="mx-auto" />
+              ) : (
+                <>
+                  <ChevronLeftIcon className="mr-2" />
+                  Collapse
+                </>
+              )}
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild className="w-full">
+                <Button variant="secondary" disabled={curUser?.role === "USER"}>
+                  <OperatorIcon className="mr-2" width={15} height={15} />
+                  {isCollapsed ? "" : "Operator"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setIsAddQuestionDialogOpen(true);
+                    setCurrentQuestionId(null);
+                  }}
+                >
+                  Add
+                  <DropdownMenuShortcut>⇧⌘A</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setIsTagDialogOpen(true)}>
+                  Tag
+                  <DropdownMenuShortcut>⇧⌘T</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setIsCategoryDialogOpen(true)}>
+                  Category
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </div>
+        <div className="flex-1 h-full bg-[hsl(var(--background-nav))] w-0 rounded-lg max-sm:flex max-sm:flex-col">
+          <div className="w-full sm:hidden my-4 px-4">
+            <Select
+              defaultValue={categories[0]?.id.toString()}
+              onValueChange={(value) => {
+                const category = categories.find(
+                  (c) => c.id.toString() === value
+                );
+                if (category) {
+                  changeCategory(category.name, category.id);
+                }
+              }}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {categories.map((item) => (
+                  <SelectItem key={item.id} value={item.id.toString()}>
+                    <div className="flex items-center">
+                      <div className="mr-2">
+                        {menuData.find((m) => m.title === item.name)?.icon}
+                      </div>
+                      {item.name}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <Accordion
+            type="single"
+            collapsible
+            className="w-full sm:h-full max-sm:flex-1 max-sm:overflow-auto"
+          >
+            <InfiniteScroll
+              items={questions}
+              loadMore={loadMore}
+              hasMore={hasMoreRef.current}
+              isLoading={isFetching}
+              renderItem={renderQuestion}
+            />
+          </Accordion>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

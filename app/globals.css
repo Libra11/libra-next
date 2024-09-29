@@ -198,9 +198,10 @@ h5 {
 }
 
 code {
-  color: hsl(var(--primary));
-  border-radius: 0.25rem;
-  margin: 0 0.25rem;
+  color: #50fa7b;
+  background-image: linear-gradient(45deg, #ff9900, #38ef7d);
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
   font-weight: bold;
 }
 
@@ -214,6 +215,9 @@ pre code {
   font-weight: inherit;
   padding: 0;
   margin: 0;
+  background-image: none;
+  -webkit-text-fill-color: inherit;
+  -webkit-background-clip: inherit;
 }
 
 p img {
@@ -231,12 +235,26 @@ blockquote {
 }
 
 table {
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
   width: 100%;
+  overflow: hidden;
 }
 
 th,
 td {
-  border: 1px solid #ddd;
-  padding: 8px;
+  border: 1px solid hsl(var(--border));
+  padding: 12px;
+  text-align: left;
+  transition: background-color 0.3s ease;
+}
+
+th {
+  background-color: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: hsl(var(--background) / 0.5);
 }

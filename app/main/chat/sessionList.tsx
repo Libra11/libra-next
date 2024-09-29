@@ -19,6 +19,7 @@ import {
   PlusIcon,
   DotsHorizontalIcon,
 } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 
 export interface Session {
   id: string;
@@ -82,8 +83,9 @@ export function SessionList({
 
   return (
     <div className="w-[300px] h-full rounded-lg p-4 bg-[hsl(var(--background-nav))] flex-col justify-start items-start max-sm:w-full max-sm:p-0">
-      <div
-        className="flex justify-between items-center bg-[hsl(var(--primary))] text-white rounded-lg p-2 mb-8 cursor-pointer"
+      <Button
+        variant="default"
+        className="flex justify-between items-center bg-[hsl(var(--primary))] text-white rounded-lg p-2 mb-8 cursor-pointer w-full h-12"
         onClick={addNewSession}
       >
         <div className="flex justify-center items-center">
@@ -91,7 +93,7 @@ export function SessionList({
           <span>Add Session</span>
         </div>
         <Pencil2Icon className="w-5 h-5" />
-      </div>
+      </Button>
       {sessions.map((session, index) => (
         <div
           key={index}

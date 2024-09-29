@@ -25,6 +25,12 @@ import STTIcon from "@/public/stt.svg";
 import TTSIcon from "@/public/tts.svg";
 import AnimateIcon from "@/public/animate.svg";
 import LogoutDialog from "../LogoutDialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const menuData = [
   {
@@ -85,62 +91,89 @@ export function NavMenu() {
         isCollapsed ? "w-20" : "w-60"
       } flex flex-col items-center py-4 px-2 transition-all bg-[hsl(var(--background-nav))] max-sm:hidden`}
     >
-      <div className="w-full flex flex-col h-full">
-        <div className="h-20 flex justify-center items-center mb-4">
-          <Image
-            className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff40]"
-            src="/Libra.svg"
-            alt="Libra Logo"
-            width={`${isCollapsed ? 40 : 60}`}
-            height={29}
-            priority
-          />
-        </div>
-        <div className="flex-1 overflow-y-auto">
-          {menuData.map((item, index) => (
-            <NavMenuItem key={index} item={item} isCollapsed={isCollapsed} />
-          ))}
-        </div>
-        <div className="mt-auto">
-          {isCollapsed ? (
-            <Button
-              variant="secondary"
-              onClick={() => setIsCollapsed(false)}
-              className="w-full mb-2 px-0"
-            >
-              <ChevronRightIcon className="mr-2" />
-            </Button>
-          ) : (
-            <Button
-              variant="secondary"
-              onClick={() => setIsCollapsed(true)}
-              className="w-full mb-2"
-            >
-              <ChevronLeftIcon className="mr-2" />
-              Collapse
-            </Button>
-          )}
+      <TooltipProvider>
+        <div className="w-full flex flex-col h-full">
+          <div className="h-20 flex justify-center items-center mb-4">
+            <Image
+              className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff40]"
+              src="/Libra.svg"
+              alt="Libra Logo"
+              width={`${isCollapsed ? 40 : 60}`}
+              height={29}
+              priority
+            />
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            {menuData.map((item, index) => (
+              <Tooltip key={index}>
+                <TooltipTrigger asChild>
+                  <div>
+                    <NavMenuItem item={item} isCollapsed={isCollapsed} />
+                  </div>
+                </TooltipTrigger>
+                {isCollapsed && (
+                  <TooltipContent side="right">
+                    <p>{item.title}</p>
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            ))}
+          </div>
+          <div className="mt-auto">
+            {isCollapsed ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setIsCollapsed(false)}
+                    className="w-full mb-2 px-0"
+                  >
+                    <ChevronRightIcon className="mr-2" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>展开</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <Button
+                variant="secondary"
+                onClick={() => setIsCollapsed(true)}
+                className="w-full mb-2"
+              >
+                <ChevronLeftIcon className="mr-2" />
+                Collapse
+              </Button>
+            )}
 
-          {isCollapsed ? (
-            <Button
-              variant="secondary"
-              onClick={() => setIsLogoutDialogOpen(true)}
-              className="w-full px-0"
-            >
-              <ExitIcon />
-            </Button>
-          ) : (
-            <Button
-              variant="secondary"
-              onClick={() => setIsLogoutDialogOpen(true)}
-              className="w-full"
-            >
-              <ExitIcon className="mr-2" />
-              Logout
-            </Button>
-          )}
+            {isCollapsed ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setIsLogoutDialogOpen(true)}
+                    className="w-full px-0"
+                  >
+                    <ExitIcon />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="right">
+                  <p>Logout</p>
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <Button
+                variant="secondary"
+                onClick={() => setIsLogoutDialogOpen(true)}
+                className="w-full"
+              >
+                <ExitIcon className="mr-2" />
+                Logout
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      </TooltipProvider>
 
       <LogoutDialog
         isOpen={isLogoutDialogOpen}
