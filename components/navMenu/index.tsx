@@ -132,7 +132,7 @@ export function NavMenu() {
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">
-                  <p>展开</p>
+                  <p>Expand</p>
                 </TooltipContent>
               </Tooltip>
             ) : (

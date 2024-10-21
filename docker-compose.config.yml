@@ -1,0 +1,37 @@
+# Use postgres/example user/password credentials
+version: "3.9"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 128mb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "****"
+      POSTGRES_USER: "****"
+  libratool:
+    image: libra001/libratool
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=****
+      - AUTH_SECRET=****
+      - GITHUB_CLIENT_ID=****
+      - GITHUB_CLIENT_SECRET=****
+      - GOOGLE_CLIENT_ID=****
+      - GOOGLE_CLIENT_SECRET=****
+      - EMAIL_USER=****
+      - EMAIL_CLIENT_ID=****
+      - EMAIL_CLIENT_SECRET=****
+      - EMAIL_REFRESH_TOKEN=****
+      - AUTH_TRUST_HOST=true
+      - NEXTAUTH_URL=http://penlibra.com:3001
+      - HOSR_URL=http://penlibra.com:3001
+      - ALIBABA_CLOUD_ACCESS_KEY_ID=****
+      - ALIBABA_CLOUD_ACCESS_SECRET=****
+      - NEXT_PUBLIC_OPENAI_API_KEY=****
+    depends_on:
+      - db

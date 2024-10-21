@@ -17,6 +17,8 @@ import FisherYatesShuffle from "./components/fisher-yates-shuffle";
 import LongestSubstringWithoutRepeatingAnimation from "./components/longest-substring-without-repeating";
 import MedianOfTwoSortedArraysAnimation from "./components/median-of-two-sorted-arrays";
 import TwoSumAnimation from "./components/two-sum-animation";
+import CallStackMicrotask from "./components/call-stack-microtask";
+import FlexBoxTutorial from "./components/flex-box-turtoral";
 
 type Animation = {
   title: string;
@@ -35,6 +37,8 @@ const animations: Animation[] = [
     component: MedianOfTwoSortedArraysAnimation,
   },
   { title: "Two Sum", component: TwoSumAnimation },
+  { title: "Call Stack and Microtask Queue", component: CallStackMicrotask },
+  { title: "Flex Box Tutorial", component: FlexBoxTutorial },
 ];
 
 const AnimationCard = ({ title, component: Component }: Animation) => {

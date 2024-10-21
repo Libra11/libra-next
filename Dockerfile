@@ -43,7 +43,7 @@ COPY . .
 # RUN yarn build
 RUN npx prisma generate
 # install chromium for puppeteer
-RUN npx puppeteer browsers install chrome
+# RUN npx puppeteer browsers install chrome
 # If using npm comment out above and use below instead
 RUN npm run build
 

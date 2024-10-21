@@ -20,6 +20,7 @@ import VueIcon from "@/public/vue.svg";
 import OperatorIcon from "@/public/operator.svg";
 import DeleteIcon from "@/public/delete.svg";
 import EditIcon from "@/public/edit.svg";
+import TypescriptIcon from "@/public/typescript.svg";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Category } from "@prisma/client";
 import { getCategoriesApi } from "@/actions/interview/category/get-categories";
@@ -95,8 +96,24 @@ import {
 export default function InterviewPage() {
   const menuData = [
     {
+      title: "HTML",
+      icon: <HTML5Icon width={20} height={20} />,
+    },
+    {
+      title: "CSS",
+      icon: <CSS3Icon width={20} height={20} />,
+    },
+    {
       title: "Javascript",
       icon: <JavascriptIcon width={20} height={20} />,
+    },
+    {
+      title: "Typescript",
+      icon: <TypescriptIcon width={20} height={20} />,
+    },
+    {
+      title: "Vue",
+      icon: <VueIcon width={20} height={20} />,
     },
     {
       title: "React",
@@ -114,14 +131,7 @@ export default function InterviewPage() {
       title: "Electron",
       icon: <ElectronIcon width={20} height={20} />,
     },
-    {
-      title: "CSS",
-      icon: <CSS3Icon width={20} height={20} />,
-    },
-    {
-      title: "HTML",
-      icon: <HTML5Icon width={20} height={20} />,
-    },
+
     {
       title: "Node",
       icon: <NodeIcon width={20} height={20} />,
@@ -129,10 +139,6 @@ export default function InterviewPage() {
     {
       title: "Docker",
       icon: <DockerIcon width={20} height={20} />,
-    },
-    {
-      title: "Vue",
-      icon: <VueIcon width={20} height={20} />,
     },
     {
       title: "Git",
