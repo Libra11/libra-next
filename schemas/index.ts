@@ -57,3 +57,20 @@ export const ParagraphSchema = z.object({
   translation: z.string(),
   note: z.string(),
 });
+
+export const AlgorithmSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  description: z.string().min(1, {
+    message: "Description is required",
+  }),
+  difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
+  approach: z.string().min(1, {
+    message: "Approach is required",
+  }),
+  solution: z.string().min(1, {
+    message: "Solution is required",
+  }),
+  tags: z.array(z.string()),
+});

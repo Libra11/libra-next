@@ -20,6 +20,7 @@ import { useState } from "react";
 import ChatIcon from "@/public/chat.svg";
 import EnglishIcon from "@/public/english.svg";
 import InterviewIcon from "@/public/interview.svg";
+import LeetcodeIcon from "@/public/leetcode.svg";
 import BlogIcon from "@/public/blog.svg";
 import STTIcon from "@/public/stt.svg";
 import TTSIcon from "@/public/tts.svg";
@@ -52,6 +53,11 @@ export const menuData = [
     title: "Interview",
     icon: <InterviewIcon width={24} height={24} />,
     link: "/main/interview",
+  },
+  {
+    title: "Leetcode",
+    icon: <LeetcodeIcon width={24} height={24} />,
+    link: "/main/algorithm",
   },
   {
     title: "Blog",

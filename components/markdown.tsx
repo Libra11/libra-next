@@ -33,7 +33,6 @@ export const MarkDownComponent = ({ text }: { text: string | undefined }) => {
   };
   return (
     <Markdown
-      className="h-full mt-2"
       rehypePlugins={[rehypeRaw, rehypeKatex]}
       remarkPlugins={[remarkGfm, remarkMath]}
       components={{

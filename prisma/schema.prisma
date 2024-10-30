@@ -208,3 +208,34 @@ model Sentence {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Algorithm {
+  id          Int                    @id @default(autoincrement())
+  name        String                 @unique
+  description String                 @db.Text
+  difficulty  Difficulty
+  approach    String                 @db.Text
+  solution    String                 @db.Text
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
+  tags        AlgorithmTagRelation[]
+
+  @@index([name], name: "algorithm_name_idx")
+}
+
+model AlgorithmTagRelation {
+  algorithmId Int
+  tagId       Int
+  algorithm   Algorithm    @relation(fields: [algorithmId], references: [id], onDelete: Cascade)
+  tag         AlgorithmTag @relation(fields: [tagId], references: [id])
+
+  @@id([algorithmId, tagId])
+}
+
+model AlgorithmTag {
+  id          Int       @id @default(autoincrement())
+  name        String    @unique
+  algorithms  AlgorithmTagRelation[]
+  
+  @@index([name], name: "algorithm_tag_name_idx")
+}

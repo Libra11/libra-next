@@ -92,7 +92,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full p-4">
       <motion.h1
-        className="text-4xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500"
+        className="text-4xl font-extrabold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 dark:from-purple-300 dark:via-pink-400 dark:to-red-400"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
@@ -102,7 +102,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
       <div className="space-y-8 mb-8">
         <div className="flex items-center">
           <motion.span
-            className="mr-4 font-bold w-20 text-end text-2xl"
+            className="mr-4 font-bold w-20 text-end text-2xl dark:text-white"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -113,7 +113,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
             {array1.map((num, index) => (
               <motion.div
                 key={index}
-                className="w-16 h-16 rounded-lg bg-blue-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white mx-1"
+                className="w-16 h-16 rounded-lg bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-700 mx-1"
                 initial={false}
                 animate={{
                   scale: index === p1 ? 1.1 : 1,
@@ -136,7 +136,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
         </div>
         <div className="flex items-center">
           <motion.span
-            className="mr-4 font-bold w-20 text-end text-2xl "
+            className="mr-4 font-bold w-20 text-end text-2xl dark:text-white"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -147,7 +147,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
             {array2.map((num, index) => (
               <motion.div
                 key={index}
-                className="w-16 h-16 rounded-lg bg-green-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white mx-1"
+                className="w-16 h-16 rounded-lg bg-green-500 dark:bg-green-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-700 mx-1"
                 initial={false}
                 animate={{
                   scale: index === p2 ? 1.1 : 1,
@@ -170,7 +170,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
         </div>
         <div className="flex items-center">
           <motion.span
-            className="mr-4 font-bold w-20 text-end text-2xl"
+            className="mr-4 font-bold w-20 text-end text-2xl dark:text-white"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -181,7 +181,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
             {sortedArray.map((num, index) => (
               <motion.div
                 key={index}
-                className="w-16 h-16 rounded-lg bg-yellow-500 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white mx-1"
+                className="w-16 h-16 rounded-lg bg-yellow-500 dark:bg-yellow-600 flex items-center justify-center text-white text-2xl font-bold shadow-lg border-2 border-white dark:border-gray-700 mx-1"
                 initial={false}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{
@@ -199,7 +199,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
         </div>
         <div className="flex items-center">
           <motion.span
-            className="mr-4 font-bold w-20 text-end text-2xl"
+            className="mr-4 font-bold w-20 text-end text-2xl dark:text-white"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
@@ -207,7 +207,7 @@ export default function MedianOfTwoSortedArraysAnimation() {
             Median:
           </motion.span>
           <motion.div
-            className="text-2xl font-bold text-red-500"
+            className="text-2xl font-bold text-red-500 dark:text-red-400"
             initial={false}
             animate={{ opacity: median !== null ? 1 : 0 }}
           >
@@ -216,13 +216,13 @@ export default function MedianOfTwoSortedArraysAnimation() {
         </div>
       </div>
       <motion.p
-        className="text-xl mb-4 text-center max-w-3xl bg-yellow-100 p-6 rounded-lg shadow-md"
+        className="text-xl mb-4 text-center max-w-3xl bg-yellow-100 dark:bg-yellow-900 dark:text-yellow-100 p-6 rounded-lg shadow-md"
         initial={false}
         animate={{ opacity: description ? 1 : 0 }}
         transition={{ duration: 0.3 }}
         dangerouslySetInnerHTML={{ __html: description }}
       />
-      <div className="mb-4">Step: {step}</div>
+      <div className="mb-4 dark:text-white">Step: {step}</div>
       <Button
         onClick={findMedianSortedArrays}
         variant="default"
