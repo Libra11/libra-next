@@ -11,34 +11,20 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
-import AddTwoNumbers from "./components/add-two-numbers";
 import FisherYatesShuffle from "./components/fisher-yates-shuffle";
-import LongestSubstringWithoutRepeatingAnimation from "./components/longest-substring-without-repeating";
-import MedianOfTwoSortedArraysAnimation from "./components/median-of-two-sorted-arrays";
-import TwoSumAnimation from "./components/two-sum-animation";
 import CallStackMicrotask from "./components/call-stack-microtask";
 import FlexBoxTutorial from "./components/flex-box-turtoral";
-
+import Vue3Reactive from "./components/vue3-reactive";
 type Animation = {
   title: string;
   component: React.ComponentType;
 };
 
 const animations: Animation[] = [
-  { title: "Add Two Numbers", component: AddTwoNumbers },
   { title: "Fisher-Yates Shuffle", component: FisherYatesShuffle },
-  {
-    title: "Longest Substring Without Repeating",
-    component: LongestSubstringWithoutRepeatingAnimation,
-  },
-  {
-    title: "Median of Two Sorted Arrays",
-    component: MedianOfTwoSortedArraysAnimation,
-  },
-  { title: "Two Sum", component: TwoSumAnimation },
   { title: "Call Stack and Microtask Queue", component: CallStackMicrotask },
   { title: "Flex Box Tutorial", component: FlexBoxTutorial },
+  { title: "Vue3 Reactive", component: Vue3Reactive },
 ];
 
 const AnimationCard = ({ title, component: Component }: Animation) => {
@@ -65,7 +51,7 @@ const AnimationCard = ({ title, component: Component }: Animation) => {
           </Button>
         </motion.div>
       </DialogTrigger>
-      <DialogContent className="w-[90vw] max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-[90vw] max-h-[90vh] overflow-y-auto">
         <Component />
       </DialogContent>
     </Dialog>

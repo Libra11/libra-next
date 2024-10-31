@@ -85,13 +85,12 @@ const formatComponentName = (name: string): string => {
 };
 
 const getAlgorithmComponent = (name: string) => {
+  const formattedName = formatComponentName(name);
   try {
-    // Convert algorithm name to component path format
-    const formattedName = formatComponentName(name);
-    // Dynamically import the component
+    // Test if the file exists using require.resolve
+    require.resolve(`./algorithms/${formattedName}`);
     return dynamic(() => import(`./algorithms/${formattedName}`));
-  } catch (error) {
-    console.warn(`Algorithm component not found for: ${name}`);
+  } catch {
     return null;
   }
 };
@@ -346,18 +345,41 @@ export default function AlgorithmPage() {
                 className="w-full h-full flex flex-col px-4"
               >
                 <TabsList className="w-full justify-start mb-2 h-12">
-                  <TabsTrigger className="h-10 w-1/4" value="description">
+                  <TabsTrigger
+                    className={`h-10 ${
+                      getAlgorithmComponent(currentAlgorithm.name)
+                        ? "w-1/4"
+                        : "w-1/3"
+                    }`}
+                    value="description"
+                  >
                     Description
                   </TabsTrigger>
-                  <TabsTrigger className="h-10 w-1/4" value="approach">
+                  <TabsTrigger
+                    className={`h-10 ${
+                      getAlgorithmComponent(currentAlgorithm.name)
+                        ? "w-1/4"
+                        : "w-1/3"
+                    }`}
+                    value="approach"
+                  >
                     Approach
                   </TabsTrigger>
-                  <TabsTrigger className="h-10 w-1/4" value="solution">
+                  <TabsTrigger
+                    className={`h-10 ${
+                      getAlgorithmComponent(currentAlgorithm.name)
+                        ? "w-1/4"
+                        : "w-1/3"
+                    }`}
+                    value="solution"
+                  >
                     Solution
                   </TabsTrigger>
-                  <TabsTrigger className="h-10 w-1/4" value="animation">
-                    Animation
-                  </TabsTrigger>
+                  {getAlgorithmComponent(currentAlgorithm.name) && (
+                    <TabsTrigger className="h-10 w-1/4" value="animation">
+                      Animation
+                    </TabsTrigger>
+                  )}
                 </TabsList>
 
                 <TabsContent value="description" className="flex-1 h-0 my-2">
@@ -398,26 +420,28 @@ export default function AlgorithmPage() {
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="animation" className="flex-1 h-0 my-2">
-                  <Card className="h-full">
-                    <CardContent className="h-full p-4">
-                      <div className="h-full overflow-y-auto">
-                        {(() => {
-                          const AlgorithmComponent = getAlgorithmComponent(
-                            currentAlgorithm.name
-                          );
-                          return AlgorithmComponent ? (
-                            <AlgorithmComponent />
-                          ) : (
-                            <div className="flex justify-center items-center h-full text-muted-foreground">
-                              No animation available for this algorithm
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </TabsContent>
+                {getAlgorithmComponent(currentAlgorithm.name) && (
+                  <TabsContent value="animation" className="flex-1 h-0 my-2">
+                    <Card className="h-full">
+                      <CardContent className="h-full p-4">
+                        <div className="h-full overflow-y-auto">
+                          {(() => {
+                            const AlgorithmComponent = getAlgorithmComponent(
+                              currentAlgorithm.name
+                            );
+                            return AlgorithmComponent ? (
+                              <AlgorithmComponent />
+                            ) : (
+                              <div className="flex justify-center items-center h-full text-muted-foreground">
+                                No animation available for this algorithm
+                              </div>
+                            );
+                          })()}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                )}
               </Tabs>
             </CardContent>
           </Card>
