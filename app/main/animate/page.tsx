@@ -15,6 +15,8 @@ import FisherYatesShuffle from "./components/fisher-yates-shuffle";
 import CallStackMicrotask from "./components/call-stack-microtask";
 import FlexBoxTutorial from "./components/flex-box-turtoral";
 import Vue3Reactive from "./components/vue3-reactive";
+import Vue3RuntimeDom from "./components/vue3-runtime-dom";
+
 type Animation = {
   title: string;
   component: React.ComponentType;
@@ -25,6 +27,7 @@ const animations: Animation[] = [
   { title: "Call Stack and Microtask Queue", component: CallStackMicrotask },
   { title: "Flex Box Tutorial", component: FlexBoxTutorial },
   { title: "Vue3 Reactive", component: Vue3Reactive },
+  { title: "Vue3 Runtime DOM", component: Vue3RuntimeDom },
 ];
 
 const AnimationCard = ({ title, component: Component }: Animation) => {
