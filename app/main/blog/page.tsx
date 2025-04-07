@@ -24,7 +24,7 @@ const BlogPage = () => {
       {isLoading && <Loading size="large" />}
       <iframe
         className="w-full h-full"
-        src="http://penlibra.com/blog/home"
+        src="https://penlibra.xin"
         allowFullScreen
         onLoad={() => setIsLoading(false)}
       ></iframe>

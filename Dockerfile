@@ -11,6 +11,8 @@ RUN apk update && apk add --no-cache \
     ttf-freefont \
     chromium
 
+RUN apk add --no-cache openssl
+
 CMD ["chromium-browser", "--no-sandbox"]
 
 # Install dependencies only when needed
